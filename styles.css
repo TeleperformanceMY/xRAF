@@ -24,6 +24,11 @@ body {
     padding: 0;
 }
 
+/* Override body color for footer specifically */
+footer, footer * {
+    color: #ffffff !important;
+}
+
 .container {
     max-width: 600px;
     flex: 1;
@@ -665,7 +670,16 @@ footer {
     margin-right: -50vw;
 }
 
-footer * {
+/* Force all footer text to be white */
+footer,
+footer *,
+footer p,
+footer span,
+footer a,
+footer div,
+footer .container,
+footer .row,
+footer .col-md-6 {
     color: #ffffff !important;
 }
 
