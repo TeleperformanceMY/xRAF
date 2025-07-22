@@ -427,6 +427,9 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.step1.style.display = 'block';
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+        
     function setupEventListeners() {
         elements.pageLangSelect.addEventListener('change', changeLanguage);
         
