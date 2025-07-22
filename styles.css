@@ -24,11 +24,6 @@ body {
     padding: 0;
 }
 
-/* Override body color for footer specifically */
-footer, footer * {
-    color: #ffffff !important;
-}
-
 .container {
     max-width: 600px;
     flex: 1;
@@ -657,9 +652,10 @@ footer, footer * {
     text-decoration: none;
 }
 
-/* Footer */
+/* Footer Styles */
 footer {
-    background-color: #000000 !important;
+    background-color: #000000;
+    color: #ffffff !important; /* Force white text */
     padding: 2.5rem 0;
     margin-top: auto;
     width: 100vw;
@@ -669,55 +665,37 @@ footer {
     margin-left: -50vw;
     margin-right: -50vw;
 }
-
-/* Force all footer text to be white */
-footer,
-footer *,
-footer p,
-footer span,
-footer a,
-footer div,
-footer .container,
-footer .row,
-footer .col-md-6 {
-    color: #ffffff !important;
-}
-
 footer .container {
     max-width: 1200px;
     width: 100%;
     padding: 0 20px;
     margin: 0 auto;
+    color: #ffffff !important;
 }
-
 footer .row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    color: #ffffff !important;
 }
-
-footer p {
+footer p,
+footer span,
+footer a,
+footer div {
+    color: #ffffff !important;
     margin: 0;
     font-size: 1.1rem;
-    color: #ffffff !important;
 }
-
-footer span {
-    color: #ffffff !important;
-}
-
 footer a {
     color: #ffffff !important;
     text-decoration: none;
     transition: all 0.3s ease;
 }
-
 footer a:hover {
     color: #cccccc !important;
     text-decoration: underline;
 }
-
 #current-year {
     font-weight: bold;
     color: #ffffff !important;
@@ -773,6 +751,10 @@ footer a:hover {
         flex-direction: column;
         text-align: center;
         gap: 10px;
+    }
+    
+    footer p {
+        font-size: 1rem;
     }
 }
 
@@ -840,9 +822,5 @@ footer a:hover {
     
     footer {
         padding: 1.5rem 0;
-    }
-    
-    footer p {
-        font-size: 1rem;
     }
 }
