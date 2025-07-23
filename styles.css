@@ -11,6 +11,54 @@
     --pink-secondary: #333333;
     --pink-light: #666666;
 }
+/* Footer Styles */
+footer {
+    background-color: #000000;
+    color: #ffffff !important; /* Force white text */
+    padding: 2.5rem 0;
+    margin-top: auto;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+footer .container {
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px;
+    margin: 0 auto;
+    color: #ffffff !important;
+}
+footer .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    color: #ffffff !important;
+}
+footer p,
+footer span,
+footer a,
+footer div {
+    color: #ffffff !important;
+    margin: 0;
+    font-size: 1.1rem;
+}
+footer a {
+    color: #ffffff !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+footer a:hover {
+    color: #cccccc !important;
+    text-decoration: underline;
+}
+#current-year {
+    font-weight: bold;
+    color: #ffffff !important;
+}
 
 body {
     font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
@@ -659,54 +707,6 @@ p, label, span:not(footer span),
     text-decoration: none;
 }
 
-/* Footer Styles */
-footer {
-    background-color: #000000;
-    color: #ffffff !important; /* Force white text */
-    padding: 2.5rem 0;
-    margin-top: auto;
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-}
-footer .container {
-    max-width: 1200px;
-    width: 100%;
-    padding: 0 20px;
-    margin: 0 auto;
-    color: #ffffff !important;
-}
-footer .row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    color: #ffffff !important;
-}
-footer p,
-footer span,
-footer a,
-footer div {
-    color: #ffffff !important;
-    margin: 0;
-    font-size: 1.1rem;
-}
-footer a {
-    color: #ffffff !important;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-footer a:hover {
-    color: #cccccc !important;
-    text-decoration: underline;
-}
-#current-year {
-    font-weight: bold;
-    color: #ffffff !important;
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {
