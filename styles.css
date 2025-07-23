@@ -30,8 +30,6 @@ h1, h2, h3, h4, h5, h6,
 p, label, span:not(footer span),
 .form-control, .form-select,
 .section-title,
-.form-check-label {
-}
 
 .container {
     max-width: 600px;
