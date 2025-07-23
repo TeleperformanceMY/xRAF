@@ -31,7 +31,6 @@ p, label, span:not(footer span),
 .form-control, .form-select,
 .section-title,
 .form-check-label {
-    color: var(--black);
 }
 
 .container {
