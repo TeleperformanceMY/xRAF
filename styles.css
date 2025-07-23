@@ -11,58 +11,11 @@
     --pink-secondary: #333333;
     --pink-light: #666666;
 }
-/* Footer Styles */
-footer {
-    background-color: #000000;
-    color: #ffffff !important; /* Force white text */
-    padding: 2.5rem 0;
-    margin-top: auto;
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-}
-footer .container {
-    max-width: 1200px;
-    width: 100%;
-    padding: 0 20px;
-    margin: 0 auto;
-    color: #ffffff !important;
-}
-footer .row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    color: #ffffff !important;
-}
-footer p,
-footer span,
-footer a,
-footer div {
-    color: #ffffff !important;
-    margin: 0;
-    font-size: 1.1rem;
-}
-footer a {
-    color: #ffffff !important;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-footer a:hover {
-    color: #cccccc !important;
-    text-decoration: underline;
-}
-#current-year {
-    font-weight: bold;
-    color: #ffffff !important;
-}
 
 body {
     font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
     background-color: var(--white);
+    color: var(--black);
     line-height: 1.6;
     min-height: 100vh;
     display: flex;
@@ -70,14 +23,6 @@ body {
     margin: 0;
     padding: 0;
 }
-
-/* Main content text styling */
-.container,
-.card-body,
-h1, h2, h3, h4, h5, h6,
-p, label, span:not(footer span),
-.form-control, .form-select,
-.section-title,
 
 .container {
     max-width: 600px;
@@ -707,6 +652,56 @@ p, label, span:not(footer span),
     text-decoration: none;
 }
 
+/* Footer Styles - Override body color inheritance */
+footer {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    padding: 2.5rem 0;
+    margin-top: auto;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+footer * {
+    color: #ffffff !important;
+}
+
+footer .container {
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+footer .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+footer p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+footer a {
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+footer a:hover {
+    color: #cccccc !important;
+    text-decoration: underline;
+}
+
+#current-year {
+    font-weight: bold;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {
