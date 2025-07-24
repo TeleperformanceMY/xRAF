@@ -653,11 +653,12 @@ body {
 }
 
 /* Fixed Footer Styles */
+/* Fixed Footer Styles */
 footer {
     background-color: #000000 !important;
     color: #ffffff !important;
     padding: 2.5rem 0;
-    margin-top: auto;
+    margin-top: 3rem;
     width: 100%;
     position: relative;
 }
@@ -674,22 +675,24 @@ footer .row {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    min-height: 80px; /* Ensure minimum height */
 }
 
 /* Explicitly set all text elements to white */
-footer p,
-footer span,
-footer div,
-footer a,
-footer .text-center,
-footer .text-md-start,
-footer .text-md-end {
+footer * {
     color: #ffffff !important;
+}
+
+footer p {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.8;
 }
 
 footer a {
     text-decoration: none;
     transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 footer a:hover {
@@ -699,8 +702,31 @@ footer a:hover {
 
 #current-year {
     font-weight: bold;
+    font-size: 1.2rem;
 }
 
+/* Additional styling for better appearance */
+footer .col-md-6 {
+    padding: 15px 0;
+}
+
+/* Make footer taller on mobile */
+@media (max-width: 768px) {
+    footer {
+        padding: 2rem 0;
+    }
+    
+    footer .row {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    footer p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {
