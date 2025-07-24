@@ -654,7 +654,7 @@ body {
 
 /* Footer Styles - Override body color inheritance */
 footer {
-    background-color: #000000 !important;
+    background-color: #ffffff !important;
     color: #ffffff !important;
     padding: 2.5rem 0;
     margin-top: auto;
