@@ -652,17 +652,14 @@ body {
     text-decoration: none;
 }
 
-/* Footer Styles - Override body color inheritance */
+/* Fixed Footer Styles */
 footer {
-    background-color: #ffffff !important;
+    background-color: #000000 !important;
     color: #ffffff !important;
     padding: 2.5rem 0;
     margin-top: auto;
     width: 100%;
-}
-
-footer * {
-    color: #ffffff !important;
+    position: relative;
 }
 
 footer .container {
@@ -679,9 +676,15 @@ footer .row {
     width: 100%;
 }
 
-footer p {
-    margin: 0;
-    font-size: 1.1rem;
+/* Explicitly set all text elements to white */
+footer p,
+footer span,
+footer div,
+footer a,
+footer .text-center,
+footer .text-md-start,
+footer .text-md-end {
+    color: #ffffff !important;
 }
 
 footer a {
@@ -697,6 +700,7 @@ footer a:hover {
 #current-year {
     font-weight: bold;
 }
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
