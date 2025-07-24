@@ -652,206 +652,195 @@ body {
     text-decoration: none;
 }
 
-/* Fixed Footer Styles */
-/* Fixed Footer Styles */
-footer {
-    background-color: #000000 !important;
-    color: #ffffff !important;
-    padding: 2.5rem 0;
-    margin-top: 3rem;
-    width: 100%;
-    position: relative;
-}
+        footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 50px 0 30px;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            border-top: 3px solid var(--secondary-color);
+        }
 
-footer .container {
-    max-width: 1200px;
-    width: 100%;
-    padding: 0 20px;
-    margin: 0 auto;
-}
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-footer .row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    min-height: 80px; /* Ensure minimum height */
-}
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
 
-/* Explicitly set all text elements to white */
-footer * {
-    color: #ffffff !important;
-}
+        .footer-section h3 {
+            color: var(--secondary-color);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
 
-footer p {
-    margin: 0;
-    font-size: 1.1rem;
-    line-height: 1.8;
-}
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary-color);
+        }
 
-footer a {
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-weight: 500;
-}
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
 
-footer a:hover {
-    color: #cccccc !important;
-    text-decoration: underline;
-}
+        .footer-links li {
+            margin-bottom: 12px;
+        }
 
-#current-year {
-    font-weight: bold;
-    font-size: 1.2rem;
-}
+        .footer-links a {
+            color: #cccccc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-/* Additional styling for better appearance */
-footer .col-md-6 {
-    padding: 15px 0;
-}
+        .footer-links a:hover {
+            color: var(--secondary-color);
+            transform: translateX(5px);
+        }
 
-/* Make footer taller on mobile */
-@media (max-width: 768px) {
-    footer {
-        padding: 2rem 0;
-    }
-    
-    footer .row {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-    }
-    
-    footer p {
-        font-size: 1rem;
-        line-height: 1.6;
-    }
-}
+        .footer-links a i {
+            width: 20px;
+            text-align: center;
+        }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .countdown-main-container {
-        width: 95%;
-        padding: 30px 20px;
-    }
-    
-    .countdown-title {
-        font-size: 2rem;
-    }
-    
-    .countdown-number {
-        font-size: 3.5rem;
-    }
-    
-    .motivational-message {
-        font-size: 1.2rem;
-    }
-    
-    .countdown-logo {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .final-amount-number {
-        font-size: 1.8rem;
-    }
-    
-    .container {
-        padding: 20px;
-    }
-    
-    .logo {
-        max-width: 140px;
-    }
-    
-    #qr-code-canvas {
-        width: 180px;
-        height: 180px;
-    }
-    
-    .small-buttons-row {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    footer .row {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-    }
-    
-    footer p {
-        font-size: 1rem;
-    }
-}
+        .footer-contact p {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            color: #cccccc;
+        }
 
-@media (max-width: 576px) {
-    .countdown-main-container {
-        padding: 25px 15px;
-    }
-    
-    .countdown-title {
-        font-size: 1.6rem;
-    }
-    
-    .countdown-number {
-        font-size: 3rem;
-    }
-    
-    .motivational-message {
-        font-size: 1rem;
-        min-height: 50px;
-    }
-    
-    .countdown-logo {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .welcome-message-line {
-        font-size: 1.1rem;
-    }
-    
-    .final-amount-number {
-        font-size: 1.5rem;
-    }
-    
-    .container {
-        padding: 15px;
-    }
-    
-    .social-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-    }
-    
-    .btn {
-        padding: 10px 20px;
-    }
-    
-    #qr-code-canvas {
-        width: 160px;
-        height: 160px;
-    }
-    
-    .consent-box {
-        font-size: 14px;
-    }
-    
-    .modal-dialog {
-        margin: 0.5rem;
-    }
-    
-    .section-box {
-        padding: 1rem;
-    }
-    
-    footer {
-        padding: 1.5rem 0;
-    }
-    
-    footer p {
-        font-size: 1rem;
-    }
-}
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #222222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            background: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid #333333;
+            color: #999999;
+            font-size: 0.95rem;
+        }
+
+        .copyright a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 992px) {
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 1.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .referral-title {
+                font-size: 1.5rem;
+            }
+            
+            .referral-amount {
+                font-size: 2rem;
+            }
+            
+            footer {
+                padding: 40px 0 25px;
+                position: relative;
+            }
+            
+            body {
+                padding-bottom: 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            
+            .header-title {
+                font-size: 1.3rem;
+            }
+            
+            .header-subtitle {
+                font-size: 0.95rem;
+            }
+            
+            .stat-card {
+                padding: 20px;
+            }
+            
+            .stat-value {
+                font-size: 1.8rem;
+            }
+            
+            .chart {
+                padding: 15px;
+            }
+            
+            .referral-section {
+                padding: 25px 15px;
+            }
+        } 
