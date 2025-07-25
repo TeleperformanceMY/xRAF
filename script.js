@@ -1,14 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Enhanced Countdown Implementation
-    const welcomePopup = document.getElementById('welcomePopup');
-    const mainContent = document.getElementById('mainContent');
-    const countdownNumber = document.getElementById('countdownNumber');
-    const progressBarFill = document.getElementById('progressBarFill');
-    const motivationalMessage = document.getElementById('motivationalMessage');
-    const celebrationContainer = document.getElementById('celebrationContainer');
-    const finalCountdownAmount = document.getElementById('finalCountdownAmount');
-    
-    // Main elements
     const elements = {
         pageLangSelect: document.getElementById('page-lang-select'),
         fullName: document.getElementById('full-name'),
@@ -29,34 +19,21 @@ document.addEventListener('DOMContentLoaded', function() {
         shareFacebook: document.getElementById('share-facebook'),
         locationSocialLinks: document.getElementById('location-social-links'),
         termsModal: document.getElementById('termsModal'),
-        termsContent: document.getElementById('termsContent')
+        termsContent: document.getElementById('termsContent'),
+        mainCountdownAmount: document.getElementById('mainCountdownAmount')
     };
 
     let currentLanguage = 'en';
     let currentLocation = '';
     let jobData = [];
 
-    // Countdown configuration
-    const startAmount = 30000;
-    const endAmount = 20000;
-    const countdownDuration = 4000; // 4 seconds
-    const totalDuration = 6000; // 6 seconds total including celebration
-    
-    // Motivational messages
-    const motivationalMessages = [
-        "Hurry! The rewards are disappearing fast! 🚀",
-        "Don't wait - the amount is dropping! ⏳",
-        "Limited rewards available! 💰",
-        "Join now before it's too late! 🔥",
-        "Others are claiming their rewards - don't miss out! 👥",
-        "Last chance to claim your rewards! ✨",
-        "Time's almost up! Don't miss out! ⚡",
-        "Final amounts remaining - act now! 🎯"
-    ];
-    
-    let currentAmount = startAmount;
-    let startTime = Date.now();
-    let messageIndex = 0;
+    // Main page countdown configuration
+    const mainCountdownConfig = {
+        startAmount: 25000,
+        endAmount: 20000,
+        duration: 30000, // 30 seconds for subtle countdown
+        updateInterval: 2000 // Update every 2 seconds
+    };
 
     // Create phone hint element
     const phoneHint = document.createElement('div');
@@ -66,82 +43,154 @@ document.addEventListener('DOMContentLoaded', function() {
     function formatMoney(amount) {
         return 'RM' + Math.floor(amount).toLocaleString('en-US');
     }
-    
-    function createConfetti() {
-        for (let i = 0; i < 50; i++) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.animationDelay = Math.random() * 3 + 's';
-            confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            celebrationContainer.appendChild(confetti);
-            
-            // Remove confetti after animation
-            setTimeout(() => {
-                if (confetti.parentNode) {
-                    confetti.parentNode.removeChild(confetti);
+
+    function startMainCountdown() {
+        let currentAmount = mainCountdownConfig.startAmount;
+        const decreasePerUpdate = (mainCountdownConfig.startAmount - mainCountdownConfig.endAmount) / 
+                                 (mainCountdownConfig.duration / mainCountdownConfig.updateInterval);
+        
+        function updateMainCountdown() {
+            if (currentAmount > mainCountdownConfig.endAmount) {
+                currentAmount -= decreasePerUpdate;
+                if (currentAmount < mainCountdownConfig.endAmount) {
+                    currentAmount = mainCountdownConfig.endAmount;
                 }
-            }, 5000);
+                
+                elements.mainCountdownAmount.textContent = formatMoney(currentAmount);
+                elements.mainCountdownAmount.classList.add('pulse');
+                
+                setTimeout(() => {
+                    elements.mainCountdownAmount.classList.remove('pulse');
+                }, 600);
+                
+                setTimeout(updateMainCountdown, mainCountdownConfig.updateInterval);
+            }
         }
+        
+        // Start the countdown after a short delay
+        setTimeout(updateMainCountdown, 3000);
     }
-    
-    function updateCountdown() {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / countdownDuration, 1);
+
+    function showWelcomePopup() {
+        const popup = document.createElement('div');
+        popup.className = 'welcome-popup';
         
-        // Smooth easing function
-        const easedProgress = 1 - Math.pow(1 - progress, 3);
+        const logo = document.createElement('img');
+        logo.src = 'TPLogo11.png';
+        logo.alt = 'Teleperformance Logo';
+        logo.className = 'welcome-logo';
         
-        // Update amount
-        currentAmount = startAmount - (startAmount - endAmount) * easedProgress;
-        countdownNumber.textContent = formatMoney(currentAmount);
+        // Create money countdown container
+        const countdownContainer = document.createElement('div');
+        countdownContainer.className = 'welcome-countdown-container';
         
-        // Update progress bar
-        progressBarFill.style.width = (progress * 100) + '%';
+        const countdownTitle = document.createElement('div');
+        countdownTitle.className = 'welcome-countdown-title';
+        // Get welcome message in all languages
+        const welcomeMessages = [
+            translations.en.welcomeMessage,
+            translations.ja.welcomeMessage,
+            translations.ko.welcomeMessage,
+            translations['zh-CN'].welcomeMessage,
+            translations['zh-HK'].welcomeMessage
+        ];    
+        const moneyCountdown = document.createElement('div');
+        moneyCountdown.className = 'welcome-money-countdown';
+        moneyCountdown.id = 'welcomeMoneyCountdown';
+        moneyCountdown.textContent = 'RM30,000';
         
-        // Add pulsing effect
-        countdownNumber.classList.add('pulsing');
-        setTimeout(() => {
-            countdownNumber.classList.remove('pulsing');
-        }, 600);
+        const hurryMessage = document.createElement('div');
+        hurryMessage.className = 'welcome-hurry-message';
+        hurryMessage.textContent = 'Hurry! The rewards are disappearing fast! 🚀';
         
-        // Update motivational message periodically
-        if (elapsed % 800 < 50) { // Change message every ~800ms
-            messageIndex = (messageIndex + 1) % motivationalMessages.length;
-            motivationalMessage.textContent = motivationalMessages[messageIndex];
-            motivationalMessage.style.animation = 'none';
-            motivationalMessage.offsetHeight; // Trigger reflow
-            motivationalMessage.style.animation = 'fadeInMessage 0.5s ease-out forwards';
-        }
+        countdownContainer.appendChild(countdownTitle);
+        countdownContainer.appendChild(moneyCountdown);
+        countdownContainer.appendChild(hurryMessage);
         
-        if (progress < 1) {
-            requestAnimationFrame(updateCountdown);
-        } else {
-            // Countdown complete - start celebration
+        const messageContainer = document.createElement('div');
+        messageContainer.className = 'welcome-message-container';
+        
+        // Create a div for each language's welcome message
+        welcomeMessages.forEach((msg, index) => {
+            const message = document.createElement('div');
+            message.className = 'welcome-message-line';
+            message.textContent = msg;
+            message.style.animationDelay = `${index * 0.5}s`;
+            messageContainer.appendChild(message);
+        });
+        
+        popup.appendChild(countdownContainer);
+        popup.appendChild(logo);
+        popup.appendChild(messageContainer);
+        document.body.appendChild(popup);
+        
+        // Start the countdown animation
+        const moneyElement = document.getElementById('welcomeMoneyCountdown');
+        const startAmount = 30000;
+        const endAmount = 25000; // End at 25000 to match main page start
+        let currentAmount = startAmount;
+        const duration = 3000; // 3 seconds
+        const startTime = Date.now();
+        
+        function updateCountdown() {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Ease-out function to slow down at the end
+            const easedProgress = 1 - Math.pow(1 - progress, 3);
+            
+            currentAmount = startAmount - (startAmount - endAmount) * easedProgress;
+            
+            moneyElement.textContent = formatMoney(currentAmount);
+            
+            // Add pumping effect
+            moneyElement.classList.add('pumping');
             setTimeout(() => {
-                createConfetti();
-                motivationalMessage.textContent = "🎉 Congratulations! Join now to claim your rewards! 🎉";
-                motivationalMessage.style.animation = 'none';
-                motivationalMessage.offsetHeight;
-                motivationalMessage.style.animation = 'fadeInMessage 0.5s ease-out forwards';
+                moneyElement.classList.remove('pumping');
             }, 500);
             
-            // Hide countdown and show main content
-            setTimeout(() => {
-                welcomePopup.classList.add('hidden');
-                setTimeout(() => {
-                    welcomePopup.style.display = 'none';
-                    mainContent.classList.add('show');
-                    // Show final countdown amount under logo
-                    finalCountdownAmount.style.display = 'block';
-                }, 1000);
-            }, totalDuration - countdownDuration);
+            // Randomly change the hurry message
+            if (Math.random() < 0.02) {
+                const hurryMessages = [
+                    "Hurry! The rewards are disappearing fast! 🚀",
+                    "Don't wait - the amount is dropping! ⏳",
+                    "Limited rewards available! 💰",
+                    "Join now before it's too late! 🔥",
+                    "Others are claiming their rewards - don't miss out! 👥"
+                ];
+                hurryMessage.textContent = hurryMessages[Math.floor(Math.random() * hurryMessages.length)];
+            }
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateCountdown);
+            } else {
+                // Final message when countdown completes
+                const finalMessages = [
+                    "Last chance to claim your rewards!",
+                    "Time's almost up! Don't miss out!",
+                    "Final amounts remaining - act now!",
+                    "Rewards are going fast - join today!"
+                ];
+                hurryMessage.textContent = finalMessages[Math.floor(Math.random() * finalMessages.length)];
+            }
         }
+        
+        // Start the countdown
+        updateCountdown();
+        
+        // Hide after 5 seconds (after all animations complete)
+        setTimeout(() => {
+            popup.classList.add('hidden');
+            // Remove after animation completes and start main countdown
+            setTimeout(() => {
+                popup.remove();
+                startMainCountdown();
+            }, 1000);
+        }, 5000);
     }
 
     function init() {
-        // Start countdown animation
-        updateCountdown();
+        showWelcomePopup();
         loadJobData();
         setupEventListeners();
         updatePageContent();
