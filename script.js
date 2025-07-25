@@ -44,6 +44,27 @@ document.addEventListener('DOMContentLoaded', function() {
         return 'RM' + Math.floor(amount).toLocaleString('en-US');
     }
 
+    function animateNumberChange(element, newValue) {
+        const currentValue = parseInt(element.textContent.replace(/[^\d]/g, ''));
+        const difference = currentValue - newValue;
+        const steps = 8;
+        const stepValue = difference / steps;
+        let currentStep = 0;
+        
+        function animate() {
+            if (currentStep < steps) {
+                const intermediateValue = currentValue - (stepValue * currentStep);
+                element.textContent = formatMoney(intermediateValue);
+                currentStep++;
+                setTimeout(animate, 50);
+            } else {
+                element.textContent = formatMoney(newValue);
+            }
+        }
+        
+        animate();
+    }
+
     function startMainCountdown() {
         let currentAmount = mainCountdownConfig.startAmount;
         const decreasePerUpdate = (mainCountdownConfig.startAmount - mainCountdownConfig.endAmount) / 
@@ -51,19 +72,33 @@ document.addEventListener('DOMContentLoaded', function() {
         
         function updateMainCountdown() {
             if (currentAmount > mainCountdownConfig.endAmount) {
+                const previousAmount = currentAmount;
                 currentAmount -= decreasePerUpdate;
                 if (currentAmount < mainCountdownConfig.endAmount) {
                     currentAmount = mainCountdownConfig.endAmount;
                 }
                 
-                elements.mainCountdownAmount.textContent = formatMoney(currentAmount);
-                elements.mainCountdownAmount.classList.add('pulse');
+                // Enhanced update animation with number rolling
+                elements.mainCountdownAmount.classList.add('update-flash');
                 
                 setTimeout(() => {
-                    elements.mainCountdownAmount.classList.remove('pulse');
-                }, 600);
+                    // Use rolling animation for number change
+                    animateNumberChange(elements.mainCountdownAmount, currentAmount);
+                    elements.mainCountdownAmount.classList.remove('update-flash');
+                    elements.mainCountdownAmount.classList.add('pulse');
+                    
+                    setTimeout(() => {
+                        elements.mainCountdownAmount.classList.remove('pulse');
+                    }, 800);
+                }, 200);
                 
                 setTimeout(updateMainCountdown, mainCountdownConfig.updateInterval);
+            } else {
+                // Final animation when countdown reaches minimum
+                elements.mainCountdownAmount.classList.add('pulse');
+                setTimeout(() => {
+                    elements.mainCountdownAmount.classList.remove('pulse');
+                }, 800);
             }
         }
         
