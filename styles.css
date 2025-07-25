@@ -35,192 +35,151 @@ body {
     width: 100%;
 }
 
-body {
-    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    background-color: var(--light-color);
-    color: var(--black);
-    line-height: 1.6;
-    min-height: 100vh;
+/* Main Page Countdown Styles */
+.main-countdown-container {
+    margin: 25px 0 35px 0;
     display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 600px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
-    position: relative;
-    padding-top: 20px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-/* Welcome Popup with Enhanced Countdown */
-.welcome-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.95);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 1;
-    transition: opacity 1s ease-out;
-}
-
-.welcome-popup.hidden {
     opacity: 0;
-    pointer-events: none;
+    transform: translateY(20px);
+    animation: slideInUp 0.8s ease-out 0.5s forwards;
 }
 
-/* Enhanced Welcome Container */
-.welcome-main-container {
+.countdown-badge {
     background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    border: 2px solid #e9ecef;
     border-radius: 20px;
-    padding: 40px;
+    padding: 30px 40px;
     box-shadow: 
-        0 15px 35px rgba(0, 0, 0, 0.1),
-        0 5px 15px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+        0 15px 35px rgba(0, 0, 0, 0.12),
+        0 8px 15px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
     text-align: center;
     position: relative;
     overflow: hidden;
-    max-width: 90%;
-    width: 600px;
+    max-width: 420px;
+    width: 100%;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: scale(1);
 }
 
-.welcome-main-container::before {
+.countdown-badge:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 20px 45px rgba(0, 0, 0, 0.15),
+        0 10px 20px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    border-color: #dee2e6;
+}
+
+.countdown-badge::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.3), transparent);
-}
-
-.welcome-logo {
-    width: 200px;
-    height: 200px;
-    margin-bottom: 20px;
-    animation: flip 2s ease-in-out;
-}
-
-.welcome-message-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
-}
-
-.welcome-message-line {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--primary-color);
-    text-align: center;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.5s ease-out forwards;
-}
-
-/* Welcome Countdown in Same Container */
-.welcome-countdown-display {
-    margin-top: 20px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: slideInUp 0.8s ease-out 1.5s forwards;
-}
-
-.welcome-countdown-badge {
-    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
-    border: 2px solid #e9ecef;
-    border-radius: 16px;
-    padding: 25px 35px;
-    box-shadow: 
-        0 8px 25px rgba(0, 0, 0, 0.1),
-        0 3px 8px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    max-width: 380px;
+    left: -100%;
     width: 100%;
-    margin: 0 auto;
-    transition: all 0.3s ease;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.1), transparent);
+    transition: left 1s ease;
 }
 
-.welcome-countdown-badge:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-        0 12px 35px rgba(0, 0, 0, 0.15),
-        0 5px 12px rgba(0, 0, 0, 0.08);
+.countdown-badge:hover::before {
+    left: 100%;
 }
 
-.welcome-countdown-label {
+.countdown-label {
     color: #495057;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 1px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.6s ease-out 0.8s forwards;
 }
 
-.welcome-countdown-amount {
+.countdown-amount {
     color: #e74c3c;
-    font-size: 2.8rem;
+    font-size: 3.2rem;
     font-weight: 900;
     margin: 12px 0;
     text-shadow: 
-        0 4px 8px rgba(231, 76, 60, 0.3),
-        0 2px 4px rgba(231, 76, 60, 0.2),
-        0 8px 16px rgba(231, 76, 60, 0.1);
+        0 4px 12px rgba(231, 76, 60, 0.3),
+        0 2px 6px rgba(231, 76, 60, 0.2),
+        0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: scaleInBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1s forwards;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     position: relative;
-    filter: drop-shadow(0 0 10px rgba(231, 76, 60, 0.4));
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 4px rgba(231, 76, 60, 0.3));
 }
 
-.welcome-countdown-amount.pulse {
+.countdown-amount::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: radial-gradient(circle, rgba(231, 76, 60, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.countdown-amount:hover::before {
+    opacity: 1;
+}
+
+.countdown-amount::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #e74c3c, transparent);
+    transform: translateX(-50%);
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+}
+
+.countdown-amount.pulse {
     animation: enhancedPulse 0.8s ease-in-out;
 }
 
-.welcome-countdown-urgency {
+.countdown-amount.update-flash {
+    animation: flashUpdate 0.6s ease-out;
+}
+
+.countdown-urgency {
     color: #6c757d;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     font-weight: 600;
     margin-top: 8px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.6s ease-out 1.2s forwards;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
 }
 
-.welcome-countdown-urgency::before {
+.countdown-urgency::before {
     content: '⚡';
     animation: sparkle 2s ease-in-out infinite;
 }
 
-/* Animations */
-@keyframes flip {
-    0% { transform: rotateY(0); }
-    50% { transform: rotateY(180deg); }
-    100% { transform: rotateY(360deg); }
-}
-
-@keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+/* Enhanced Animations */
 @keyframes slideInUp {
     from {
         opacity: 0;
@@ -232,21 +191,54 @@ body {
     }
 }
 
+@keyframes scaleInBounce {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 @keyframes enhancedPulse {
     0% { 
         transform: scale(1);
         color: #e74c3c;
-        filter: drop-shadow(0 0 10px rgba(231, 76, 60, 0.4));
     }
     30% { 
         transform: scale(1.08);
         color: #c0392b;
-        filter: drop-shadow(0 0 20px rgba(231, 76, 60, 0.6));
+        text-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
     }
     100% { 
         transform: scale(1);
         color: #e74c3c;
-        filter: drop-shadow(0 0 10px rgba(231, 76, 60, 0.4));
+    }
+}
+
+@keyframes flashUpdate {
+    0% { 
+        transform: scale(1);
+        color: #e74c3c;
+    }
+    50% { 
+        transform: scale(1.12);
+        color: #fff;
+        background: rgba(231, 76, 60, 0.9);
+        border-radius: 8px;
+        padding: 4px 8px;
+    }
+    100% { 
+        transform: scale(1);
+        color: #e74c3c;
+        background: transparent;
+        padding: 0;
     }
 }
 
@@ -261,27 +253,23 @@ body {
     }
 }
 
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-@keyframes pump {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-.pumping {
-    animation: pump 0.5s;
-}
-
 /* Fix body and html for footer gap */
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    padding: 20px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 /* Welcome Popup with Countdown */
@@ -299,11 +287,31 @@ html, body {
     z-index: 9999;
     opacity: 1;
     transition: opacity 1s ease-out;
+    padding: 20px;
 }
 
 .welcome-popup.hidden {
     opacity: 0;
     pointer-events: none;
+}
+
+.welcome-logo {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 20px;
+    animation: flip 2s ease-in-out;
+}
+
+.welcome-title {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 30px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease-out 0.3s forwards;
+    max-width: 90%;
 }
 
 .welcome-countdown-container {
@@ -319,50 +327,30 @@ html, body {
 }
 
 .welcome-countdown-title {
-    font-size: 2rem;
+    font-size: 1.2rem;
     font-weight: bold;
     color: #2c3e50;
     margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .welcome-money-countdown {
     font-size: 4rem;
     font-weight: bold;
-    color: #e63946;
+    color: #e74c3c;
     margin: 20px 0;
     transition: all 0.3s ease;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    text-shadow: 
+        0 4px 12px rgba(231, 76, 60, 0.3),
+        0 2px 6px rgba(231, 76, 60, 0.2);
 }
 
 .welcome-hurry-message {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     color: #2c3e50;
     font-style: italic;
     animation: pulse 2s infinite;
-}
-
-.welcome-logo {
-    width: 200px;
-    height: 200px;
-    margin-bottom: 30px;
-    animation: flip 2s ease-in-out;
-}
-
-.welcome-message-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.welcome-message-line {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--primary-color);
-    text-align: center;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.5s ease-out forwards;
 }
 
 /* Animations */
@@ -397,26 +385,21 @@ html, body {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .welcome-main-container {
-        padding: 30px 25px;
-        width: 90%;
+    .countdown-badge {
+        padding: 25px 30px;
+        max-width: 350px;
     }
     
-    .welcome-countdown-badge {
-        padding: 20px 25px;
-        max-width: 340px;
+    .countdown-amount {
+        font-size: 2.6rem;
     }
     
-    .welcome-countdown-amount {
-        font-size: 2.4rem;
+    .countdown-label {
+        font-size: 0.9rem;
     }
     
-    .welcome-countdown-label {
+    .countdown-urgency {
         font-size: 0.85rem;
-    }
-    
-    .welcome-countdown-urgency {
-        font-size: 0.8rem;
     }
     
     .container {
@@ -435,6 +418,22 @@ html, body {
     .welcome-logo {
         width: 150px;
         height: 150px;
+    }
+    
+    .welcome-title {
+        font-size: 1.8rem;
+    }
+    
+    .welcome-countdown-title {
+        font-size: 1rem;
+    }
+    
+    .welcome-money-countdown {
+        font-size: 3rem;
+    }
+    
+    .welcome-hurry-message {
+        font-size: 1rem;
     }
     
     .top-buttons-container {
@@ -468,34 +467,25 @@ html, body {
     .employee-login-wrapper {
         width: 100%;
     }
-    
-    .welcome-message-line {
-        font-size: 1.2rem;
-    }
 }
 
 @media (max-width: 576px) {
-    .welcome-main-container {
-        padding: 20px;
-        width: 95%;
+    .countdown-badge {
+        padding: 20px 25px;
+        max-width: 320px;
+        margin: 0 15px;
     }
     
-    .welcome-countdown-badge {
-        padding: 18px 22px;
-        max-width: 300px;
-        margin: 0 10px;
+    .countdown-amount {
+        font-size: 2.2rem;
     }
     
-    .welcome-countdown-amount {
-        font-size: 2rem;
+    .countdown-label {
+        font-size: 0.85rem;
     }
     
-    .welcome-countdown-label {
+    .countdown-urgency {
         font-size: 0.8rem;
-    }
-    
-    .welcome-countdown-urgency {
-        font-size: 0.75rem;
     }
     
     .container {
@@ -534,8 +524,24 @@ html, body {
         height: 120px;
     }
     
-    .welcome-message-line {
-        font-size: 1rem;
+    .welcome-title {
+        font-size: 1.4rem;
+    }
+    
+    .welcome-countdown-container {
+        padding: 15px;
+    }
+    
+    .welcome-countdown-title {
+        font-size: 0.9rem;
+    }
+    
+    .welcome-money-countdown {
+        font-size: 2.5rem;
+    }
+    
+    .welcome-hurry-message {
+        font-size: 0.9rem;
     }
     
     footer {
