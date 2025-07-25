@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Main page countdown configuration
     const mainCountdownConfig = {
-        startAmount: 20000,
+        startAmount: 30000,
         endAmount: 20000,
         duration: 20000, // 30 seconds for subtle countdown
         updateInterval: 2000 // Update every 2 seconds
