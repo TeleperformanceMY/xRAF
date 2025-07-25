@@ -29,9 +29,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Main page countdown configuration
     const mainCountdownConfig = {
-        startAmount: 25000,
+        startAmount: 20000,
         endAmount: 20000,
-        duration: 30000, // 30 seconds for subtle countdown
+        duration: 20000, // 30 seconds for subtle countdown
         updateInterval: 2000 // Update every 2 seconds
     };
 
@@ -162,9 +162,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Start the countdown animation
         const moneyElement = document.getElementById('welcomeMoneyCountdown');
         const startAmount = 30000;
-        const endAmount = 25000; // End at 25000 to match main page start
+        const endAmount = 20000; // End at 25000 to match main page start
         let currentAmount = startAmount;
-        const duration = 3000; // 3 seconds
+        const duration = 2000; // 3 seconds
         const startTime = Date.now();
         
         function updateCountdown() {
