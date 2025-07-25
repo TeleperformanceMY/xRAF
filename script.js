@@ -110,10 +110,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const popup = document.createElement('div');
         popup.className = 'welcome-popup';
         
+        // Logo section
         const logo = document.createElement('img');
         logo.src = 'TPLogo11.png';
         logo.alt = 'Teleperformance Logo';
         logo.className = 'welcome-logo';
+        
+        // Welcome title
+        const welcomeTitle = document.createElement('h1');
+        welcomeTitle.className = 'welcome-title';
+        welcomeTitle.textContent = 'Welcome to TP External Refer A Friend Program';
         
         // Create money countdown container
         const countdownContainer = document.createElement('div');
@@ -121,18 +127,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const countdownTitle = document.createElement('div');
         countdownTitle.className = 'welcome-countdown-title';
-        // Get welcome message in all languages
-        const welcomeMessages = [
-            translations.en.welcomeMessage,
-            translations.ja.welcomeMessage,
-            translations.ko.welcomeMessage,
-            translations['zh-CN'].welcomeMessage,
-            translations['zh-HK'].welcomeMessage
-        ];    
+        countdownTitle.textContent = 'Total Rewards Available';
+        
         const moneyCountdown = document.createElement('div');
         moneyCountdown.className = 'welcome-money-countdown';
         moneyCountdown.id = 'welcomeMoneyCountdown';
-        moneyCountdown.textContent = 'RM30,000';
+        moneyCountdown.textContent = 'RM20,000';
         
         const hurryMessage = document.createElement('div');
         hurryMessage.className = 'welcome-hurry-message';
@@ -142,78 +142,26 @@ document.addEventListener('DOMContentLoaded', function() {
         countdownContainer.appendChild(moneyCountdown);
         countdownContainer.appendChild(hurryMessage);
         
-        const messageContainer = document.createElement('div');
-        messageContainer.className = 'welcome-message-container';
-        
-        // Create a div for each language's welcome message
-        welcomeMessages.forEach((msg, index) => {
-            const message = document.createElement('div');
-            message.className = 'welcome-message-line';
-            message.textContent = msg;
-            message.style.animationDelay = `${index * 0.5}s`;
-            messageContainer.appendChild(message);
-        });
-        
-        popup.appendChild(countdownContainer);
         popup.appendChild(logo);
-        popup.appendChild(messageContainer);
+        popup.appendChild(welcomeTitle);
+        popup.appendChild(countdownContainer);
         document.body.appendChild(popup);
         
         // Start the countdown animation
         const moneyElement = document.getElementById('welcomeMoneyCountdown');
-        const startAmount = 30000;
-        const endAmount = 20000; // End at 20000 to match main page start
-        let currentAmount = startAmount;
-        const duration = 3000; // 3 seconds
-        const startTime = Date.now();
+        const startAmount = 20000;
+        const endAmount = 20000; // Keep it at 20000
         
-        function updateCountdown() {
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            
-            // Ease-out function to slow down at the end
-            const easedProgress = 1 - Math.pow(1 - progress, 3);
-            
-            currentAmount = startAmount - (startAmount - endAmount) * easedProgress;
-            
-            moneyElement.textContent = formatMoney(currentAmount);
-            
-            // Add pumping effect
-            moneyElement.classList.add('pumping');
-            setTimeout(() => {
-                moneyElement.classList.remove('pumping');
-            }, 500);
-            
-            // Randomly change the hurry message
-            if (Math.random() < 0.02) {
-                const hurryMessages = [
-                    "Hurry! The rewards are disappearing fast! 🚀",
-                    "Don't wait - the amount is dropping! ⏳",
-                    "Limited rewards available! 💰",
-                    "Join now before it's too late! 🔥",
-                    "Others are claiming their rewards - don't miss out! 👥"
-                ];
-                hurryMessage.textContent = hurryMessages[Math.floor(Math.random() * hurryMessages.length)];
-            }
-            
-            if (progress < 1) {
-                requestAnimationFrame(updateCountdown);
-            } else {
-                // Final message when countdown completes
-                const finalMessages = [
-                    "Last chance to claim your rewards!",
-                    "Time's almost up! Don't miss out!",
-                    "Final amounts remaining - act now!",
-                    "Rewards are going fast - join today!"
-                ];
-                hurryMessage.textContent = finalMessages[Math.floor(Math.random() * finalMessages.length)];
-            }
-        }
+        // Just show the amount without animation since it's the same
+        moneyElement.textContent = formatMoney(startAmount);
         
-        // Start the countdown
-        updateCountdown();
+        // Add some visual effects
+        moneyElement.classList.add('pumping');
+        setTimeout(() => {
+            moneyElement.classList.remove('pumping');
+        }, 500);
         
-        // Hide after 5 seconds (after all animations complete)
+        // Hide after 4 seconds
         setTimeout(() => {
             popup.classList.add('hidden');
             // Remove after animation completes and start main countdown
@@ -221,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 popup.remove();
                 startMainCountdown();
             }, 1000);
-        }, 5000);
+        }, 4000);
     }
 
     function init() {
