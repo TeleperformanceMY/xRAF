@@ -178,6 +178,10 @@ body {
     content: '⚡';
     animation: sparkle 2s ease-in-out infinite;
 }
+.countdown-urgency::after {
+    content: '⚡';
+    animation: sparkle 2s ease-in-out infinite;
+}
 
 /* Enhanced Animations */
 @keyframes slideInUp {
