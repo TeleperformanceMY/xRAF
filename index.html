@@ -3,222 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TP External RAF (Refer A Friend)</title>
+    <title>TP External RAF Dashboard</title>
+    <link rel="icon" href="TPLogo11.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="TPLogo11.png" type="image/png">
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-<div class="container py-4">
-    <div class="text-center mb-4">
-        <img src="TPLogo11.png" alt="TP Logo" class="logo img-fluid" style="max-height: 80px;">
-        <h1 class="mt-3">TP xRAF</h1>
-        <p class="lead">External Refer A Friend Program</p>
-    </div>
-    
-    <!-- Main Page Countdown Display -->
-    <div class="main-countdown-container" id="mainCountdownContainer">
-        <div class="countdown-badge">
-            <div class="countdown-label">Total Rewards Available</div>
-            <div class="countdown-amount" id="mainCountdownAmount">RM20,000</div>
-            <div class="countdown-urgency">💰Limited Time Offer💰</div>
+    <div class="container py-4">
+        <div class="text-center mb-4">
+            <img src="TPLogo11.png" alt="TP Logo" class="logo">
         </div>
-    </div>
-    
-    <!-- New Button Layout -->
-    <div class="buttons-container">
-        <!-- Job Portal Button (full width) -->
-        <div class="job-portal-wrapper mb-3">
-            <a href="https://tpmyandtpth.github.io/LP/" class="job-portal-btn" target="_blank">
-                <i class="fas fa-briefcase"></i> <span data-translate="jobPortalText"> TP Job Portal</span>
-            </a>
-        </div>
-        
-        <!-- Smaller buttons in one row -->
-        <div class="small-buttons-row">
-            <div class="dashboard-btn-wrapper">
-                <a href="https://tpmyandtpth.github.io/xRAF-Dashboard/" class="dashboard-btn" target="_blank">
-                    <i class="fas fa-tachometer-alt"></i> <span data-translate="dashboardText">Dashboard</span>
-                </a>
-            </div>
-            <div class="employee-login-wrapper">
-                <a href="https://tpmyandtpth.github.io/RAF/" class="employee-btn" target="_blank">
-                    <i class="fas fa-user-shield"></i> <span data-translate="clickHereText">TP employee!</span>
-                </a>
+
+        <!-- Language Selection -->
+        <div class="row justify-content-end mb-3">
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label for="lang-select" class="form-label" data-translate="pageLangLabel">Choose Your Language:</label>
+                    <select class="form-select" id="lang-select">
+                        <option value="en">English</option>
+                        <option value="ja">日本語</option>
+                        <option value="ko">한국어</option>
+                        <option value="zh-CN">中文 (简体)</option>
+                        <option value="zh-HK">中文 (繁體)</option>
+                    </select>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="card shadow-sm mx-auto" style="max-width: 800px;">
-    
-        <div class="card shadow-sm">
-            <div class="card-body p-4">
-                <div id="step1">
-                    <div class="mb-3">
-                        <label for="page-lang-select" class="form-label" data-translate="pageLangLabel">Choose Your Language:</label>
-                        <select id="page-lang-select" class="form-select">
-                            <option value="en">English</option>
-                            <option value="ja">Japanese</option>
-                            <option value="ko">Korean</option>
-                            <option value="zh-CN">Mandarin</option>
-                            <option value="zh-HK">Cantonese</option>
-                        </select>
-                    </div>
 
-                    <div class="section-box mb-4">
-                        <h5 class="section-title" data-translate="yourInfoTitle">Your Information</h5>
+        <!-- Authentication Step -->
+        <div id="auth-step">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title text-center" data-translate="dashboardTitle">TP External RAF Dashboard</h2>
+                    <p class="card-text text-center mb-4" data-translate="dashboardSubtitle">Enter your details to view your referral status</p>
+                    
+                    <form id="dashboard-form">
                         <div class="mb-3">
-                            <label for="full-name" class="form-label" data-translate="fullNameLabel">Full Name:</label>
-                            <input type="text" id="full-name" class="form-control" data-translate-placeholder="fullNamePlaceholder" required>
-                            <div class="invalid-feedback" data-translate="fullNameError">Please provide your full name.</div>
+                            <label for="dashboard-phone" class="form-label" data-translate="phoneLabel">Phone Number:</label>
+                            <input type="tel" class="form-control" id="dashboard-phone" placeholder="Enter your phone number (01XXXXXXXX)" data-translate-placeholder="phonePlaceholder" required>
+                            <div class="invalid-feedback" data-translate="phoneError">Please provide a valid phone number (01XXXXXXXX).</div>
                         </div>
-
+                        
                         <div class="mb-3">
-                            <label for="phone-number" class="form-label" data-translate="phoneLabel">Phone Number:</label>
-                            <input type="tel" id="phone-number" class="form-control" data-translate-placeholder="phonePlaceholder" required>
-                            <div class="invalid-feedback" data-translate="phoneError">Please provide a valid phone number.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="email" class="form-label" data-translate="emailLabel">Email Address:</label>
-                            <input type="email" id="email" class="form-control" data-translate-placeholder="emailPlaceholder" required>
+                            <label for="dashboard-email" class="form-label" data-translate="emailLabel">Email Address:</label>
+                            <input type="email" class="form-control" id="dashboard-email" placeholder="Enter your email address" data-translate-placeholder="emailPlaceholder" required>
                             <div class="invalid-feedback" data-translate="emailError">Please provide a valid email address.</div>
                         </div>
-                    </div>
-
-                    <div class="section-box mb-4">
-                        <h5 class="section-title" data-translate="friendInfoTitle">Friend's Information</h5>
-                        <div class="mb-3">
-                            <label for="job-lang-select" class="form-label" data-translate="jobLangLabel">Job Language:</label>
-                            <select id="job-lang-select" class="form-select" required>
-                                <option value="" selected disabled data-translate="selectOption">Select an option</option>
-                            </select>
-                            <div class="invalid-feedback" data-translate="jobLangError">Please select a job language.</div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="button" id="dashboard-submit" class="btn btn-primary" data-translate="viewStatusBtn">View Referral Status</button>
+                            <a href="https://tpmyandtpth.github.io/xRAF/" class="btn btn-outline-secondary" data-translate="backToRAF">Back to Referral Form</a>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="location-select" class="form-label" data-translate="locationLabel">Working Location:</label>
-                            <select id="location-select" class="form-select" required>
-                                <option value="" selected disabled data-translate="selectOption">Select an option</option>
-                            </select>
-                            <div class="invalid-feedback" data-translate="locationError">Please select a location.</div>
-                        </div>
-                    </div>
-
-                    <div class="consent-box mb-4 p-3 border rounded">
-                        <div class="form-check">
-                            <div class="d-flex align-items-start">
-                                <div class="me-2">
-                                    <input type="checkbox" id="consent-checkbox" class="form-check-input" required>
-                                </div>
-                                <div>
-                                    <label class="form-check-label" for="consent-checkbox">
-                                        <span data-translate="consentText1">I agree to the</span> 
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" data-translate="termsLink">terms and conditions</a> 
-                                        <span data-translate="consentText2">of the Refer a Friend program. I confirm that I have obtained my friend's consent to share their information with TP (Teleperformance Malaysia Sdn Bhd.) for recruitment purposes.</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="invalid-feedback" data-translate="consentError">You must agree to the terms and conditions.</div>
-                        </div>
-                    </div>
-
-                    <button id="next-btn" class="btn btn-primary w-100" data-translate="nextBtn" disabled>Submit Referral</button>
-
-                    <!-- Social Media -->
-                    <div class="mt-4">
-                        <div class="row text-center">
-                            <!-- TP Global -->
-                            <div class="col-md-4 mb-3">
-                                <h5 data-translate="tpGlobal">TP Global</h5>
-                                <div class="d-flex justify-content-center gap-3">
-                                    <a href="https://www.linkedin.com/company/teleperformance" class="social-icon" target="_blank"><i class="fab fa-linkedin"></i></a>
-                                    <a href="https://www.youtube.com/@TeleperformanceGroup" class="social-icon" target="_blank"><i class="fab fa-youtube"></i></a>
-                                    <a href="https://www.tiktok.com/@teleperformance_group" class="social-icon" target="_blank"><i class="fab fa-tiktok"></i></a>
-                                </div>
-                            </div>
-                            <!-- TP Malaysia -->
-                            <div class="col-md-4 mb-3">
-                                <h5 data-translate="followMalaysia">TP Malaysia</h5>
-                                <div class="d-flex justify-content-center gap-3">
-                                    <a href="http://www.facebook.com/TPinMalaysia/" class="social-icon" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="http://www.instagram.com/tp_malaysia/" class="social-icon" target="_blank"><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                            <!-- TP Thailand -->
-                            <div class="col-md-4 mb-3">
-                                <h5 data-translate="followThailand">TP Thailand</h5>
-                                <div class="d-flex justify-content-center gap-3">
-                                    <a href="http://www.facebook.com/TPinThailand/" class="social-icon" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="http://www.instagram.com/tpinthailand/" class="social-icon" target="_blank"><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
+            </div>
 
-                <div id="step2" style="display:none;">
-                    <button id="back-btn" class="btn btn-outline-secondary mb-3">
-                        <i class="fas fa-arrow-left me-2"></i> <span data-translate="backText">Back</span>
-                    </button>
-
-                    <h4 class="mb-3" data-translate="thankYouTitle">Thank you for your referral!</h4>
-                    <p data-translate="referralMessage">Here's the personalized link for your friend to apply:</p>
-
-                    <div class="input-group mb-3">
-                        <input type="text" id="referral-link" class="form-control" readonly>
-                        <button id="copy-btn" class="btn btn-secondary" type="button" data-translate="copyText">Copy</button>
-                    </div>
-
-                    <div class="text-center my-4">
-                        <canvas id="qr-code-canvas" class="qr-code"></canvas>
-                        <p class="mt-2" data-translate="scanText">Or scan this QR code to apply</p>
-                    </div>
-
-                    <div class="d-flex justify-content-center gap-2 mb-4 flex-wrap">
-                        <button id="share-whatsapp" class="btn btn-success mb-2">
-                            <i class="fab fa-whatsapp me-2"></i> <span data-translate="whatsappText">WhatsApp</span>
-                        </button>
-                        <button id="share-line" class="btn btn-success mb-2" style="background-color: #00B900;">
-                            <i class="fab fa-line me-2"></i> <span data-translate="lineText">Line</span>
-                        </button>
-                        <button id="share-facebook" class="btn btn-success mb-2" style="background-color: #1877F2;">
-                            <i class="fab fa-facebook-f me-2"></i> <span data-translate="facebookText">Facebook</span>
-                        </button>
-                    </div>
-
-                    <div class="mt-4 text-center">
-                        <h5 data-translate="locationSocial">Our Social Media:</h5>
-                        <div class="social-media-container" id="location-social-links"></div>
-                    </div>
+            <!-- Email Contact Section -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <p class="mb-0">
+                        <span data-translate="contactUsText">Email us at:</span>
+                        <a href="mailto:tpmycareers@teleperformance.com">tpmycareers@teleperformance.com</a>
+                    </p>
                 </div>
             </div>
         </div>
+
+        <!-- Results Step (initially hidden) -->
+        <div id="results-step" style="display: none;">
+            <!-- Content will be dynamically inserted here by JavaScript -->
+        </div>
     </div>
-    
-        <!-- Footer -->
-        <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 text-center text-md-start">
-                        <p class="mb-0">© <span id="current-year"></span> TP.COM All rights reserved.</p>
-                    </div>
-                    <div class="col-md-6 text-center text-md-end">
-                        <p class="mb-0">#MoreTogether</p>
-                    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3 bg-dark text-white">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-1">© <span id="current-year"></span> TP. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-1 small">Employee Referral Program</p>
                 </div>
             </div>
-        </footer>
-    
-    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        </div>
+    </footer>
+
+    <!-- TnG Terms Modal -->
+    <div class="modal fade" id="tngModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="termsModalLabel" data-translate="termsTitle">Terms and Conditions</h5>
+                    <h5 class="modal-title" data-translate="paymentTermsTitle">Payment Terms & Conditions</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="termsContent"></div>
+                <div class="modal-body">
+                    <p data-translate="paymentTermsText1">Payments will be made to your TnG eWallet linked to your phone number.</p>
+                    <p data-translate="paymentTermsText2">RM50 will be paid when candidate passes assessment. RM750 bonus will be paid only after your referred candidate successfully completes the 90-day probation period.</p>
+                    <p data-translate="paymentTermsText3">All payments are subject to verification and may take up to 30 days after probation completion.</p>
+                    <p><strong data-translate="previouslyAppliedNote">Note:</strong> <span data-translate="previouslyAppliedNoteText">No payment will be made if the candidate had previously applied to TP</span></p>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="closeBtn">Close</button>
                 </div>
@@ -226,9 +111,53 @@
         </div>
     </div>
 
+    <!-- User Not Found Modal -->
+    <div class="modal fade" id="userNotFoundModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" data-translate="userNotFoundTitle">No Referrals Found</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p data-translate="userNotFoundText1">We couldn't find any referrals with the provided email and phone number.</p>
+                    <p data-translate="userNotFoundText2">Please double-check your information or contact us for assistance.</p>
+                    <p><a href="mailto:tpmycareers@teleperformance.com">tpmycareers@teleperformance.com</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-translate="okBtn">OK</button>
+                    <a href="mailto:tpmycareers@teleperformance.com" class="btn btn-outline-primary">
+                        <i class="fas fa-envelope me-2"></i><span data-translate="contactUsBtn">Contact Us</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" data-translate="errorTitle">Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="error-message" data-translate="errorMessage">An error occurred. Please try again later.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="closeBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Load translations first, then the main script -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="translations.js"></script>
+    <script src="statusMapping.js"></script>
+    <script src="apiService.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
