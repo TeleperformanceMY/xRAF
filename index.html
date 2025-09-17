@@ -1,337 +1,453 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TP External RAF (Refer A Friend)</title>
-
-  <!-- GA4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T9F5KMVVY8"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-T9F5KMVVY8', {
-      send_page_view: true,
-      allow_google_signals: true,
-      allow_ad_personalization_signals: true,
-      custom_map: {'custom_parameter_1':'referral_program'}
-    });
-
-    function trackCustomEvent(eventName, parameters = {}) {
-      gtag('event', eventName, { event_category: 'xRAF_Program', event_label: 'External_Referral', ...parameters });
-    }
-
-    function trackPageEngagement() {
-      let startTime = Date.now(), maxScroll = 0;
-      window.addEventListener('scroll', () => {
-        const p = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-        if (p > maxScroll) maxScroll = p;
-      });
-      window.addEventListener('beforeunload', () => {
-        gtag('event', 'page_engagement', {
-          event_category: 'User_Engagement',
-          custom_parameter_time_spent: Math.round((Date.now() - startTime) / 1000),
-          custom_parameter_max_scroll: maxScroll,
-          non_interaction: true
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP External RAF (Refer A Friend)</title>
+    
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T9F5KMVVY8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        
+        // Replace 'GA_MEASUREMENT_ID' with your actual Google Analytics 4 Measurement ID
+        gtag('config', 'G-T9F5KMVVY8', {
+            // Enhanced measurement for better tracking
+            send_page_view: true,
+            allow_google_signals: true,
+            allow_ad_personalization_signals: true,
+            // Custom parameters
+            custom_map: {
+                'custom_parameter_1': 'referral_program'
+            }
         });
-      });
-    }
-    document.addEventListener('DOMContentLoaded', trackPageEngagement);
-  </script>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="styles.css"/>
-  <link rel="icon" href="TPLogo11.png" type="image/png"/>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+        
+        // Custom event tracking function for xRAF specific events
+        function trackCustomEvent(eventName, parameters = {}) {
+            gtag('event', eventName, {
+                event_category: 'xRAF_Program',
+                event_label: 'External_Referral',
+                ...parameters
+            });
+        }
+        
+        // Track page engagement
+        function trackPageEngagement() {
+            let startTime = Date.now();
+            let maxScroll = 0;
+            
+            // Track scroll depth
+            window.addEventListener('scroll', function() {
+                let scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+                if (scrollPercent > maxScroll) {
+                    maxScroll = scrollPercent;
+                }
+            });
+            
+            // Track time on page when user leaves
+            window.addEventListener('beforeunload', function() {
+                let timeSpent = Math.round((Date.now() - startTime) / 1000);
+                gtag('event', 'page_engagement', {
+                    event_category: 'User_Engagement',
+                    custom_parameter_time_spent: timeSpent,
+                    custom_parameter_max_scroll: maxScroll,
+                    non_interaction: true
+                });
+            });
+        }
+        
+        // Initialize engagement tracking when page loads
+        document.addEventListener('DOMContentLoaded', trackPageEngagement);
+    </script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="TPLogo11.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body>
-  <div class="container py-4">
+<div class="container py-4">
     <div class="text-center mb-4">
-      <img src="TPLogo11.png" alt="TP Logo" class="logo img-fluid" style="max-height: 80px;">
-      <h1 class="mt-3">TP xRAF</h1>
-      <p class="lead">External Refer A Friend Program</p>
+        <img src="TPLogo11.png" alt="TP Logo" class="logo img-fluid" style="max-height: 80px;">
+        <h1 class="mt-3">TP xRAF</h1>
+        <p class="lead">External Refer A Friend Program</p>
     </div>
-
-    <!-- Main Page Countdown -->
+    
+    <!-- Main Page Countdown Display -->
     <div class="main-countdown-container" id="mainCountdownContainer">
-      <div class="countdown-badge">
-        <div class="countdown-label">Total Rewards Available</div>
-        <div class="countdown-amount" id="mainCountdownAmount">RM20,000</div>
-        <div class="countdown-urgency">💰Limited Time Offer💰</div>
-      </div>
+        <div class="countdown-badge">
+            <div class="countdown-label">Total Rewards Available</div>
+            <div class="countdown-amount" id="mainCountdownAmount">RM20,000</div>
+            <div class="countdown-urgency">💰Limited Time Offer💰</div>
+        </div>
     </div>
-
-    <!-- Buttons -->
+    
+    <!-- New Button Layout -->
     <div class="buttons-container">
-      <div class="job-portal-wrapper mb-3">
-        <a href="https://tpmyandtpth.github.io/LP/?utm_source=xRAF&utm_medium=Broadcast&utm_campaign=landing_page&lang=en"
-           class="job-portal-btn" target="_blank"
-           onclick="trackCustomEvent('job_portal_click',{custom_parameter_button_type:'main_job_portal'})">
-          <i class="fas fa-briefcase"></i> <span data-translate="jobPortalText"> TP Job Portal</span>
-        </a>
-      </div>
-      <div class="small-buttons-row">
-        <div class="dashboard-btn-wrapper">
-          <a href="https://tpmyandtpth.github.io/xRAF-Dashboard/" class="dashboard-btn" target="_blank"
-             onclick="trackCustomEvent('dashboard_click',{custom_parameter_button_type:'dashboard'})">
-            <i class="fas fa-tachometer-alt"></i> <span data-translate="dashboardText">Dashboard</span>
-          </a>
+        <!-- Job Portal Button (full width) -->
+        <div class="job-portal-wrapper mb-3">
+            <a href="https://tpmyandtpth.github.io/LP/?utm_source=xRAF&utm_medium=Broadcast&utm_campaign=landing_page&lang=en" class="job-portal-btn" target="_blank" onclick="trackCustomEvent('job_portal_click', {custom_parameter_button_type: 'main_job_portal'})">
+                <i class="fas fa-briefcase"></i> <span data-translate="jobPortalText"> TP Job Portal</span>
+            </a>
         </div>
-        <div class="employee-login-wrapper">
-          <a href="https://tpmyandtpth.github.io/RAF/" class="employee-btn" target="_blank"
-             onclick="trackCustomEvent('employee_portal_click',{custom_parameter_button_type:'employee_portal'})">
-            <i class="fas fa-user-shield"></i> <span data-translate="clickHereText">TP employee!</span>
-          </a>
+        
+        <!-- Smaller buttons in one row -->
+        <div class="small-buttons-row">
+            <div class="dashboard-btn-wrapper">
+                <a href="https://tpmyandtpth.github.io/xRAF-Dashboard/" class="dashboard-btn" target="_blank" onclick="trackCustomEvent('dashboard_click', {custom_parameter_button_type: 'dashboard'})">
+                    <i class="fas fa-tachometer-alt"></i> <span data-translate="dashboardText">Dashboard</span>
+                </a>
+            </div>
+            <div class="employee-login-wrapper">
+                <a href="https://tpmyandtpth.github.io/RAF/" class="employee-btn" target="_blank" onclick="trackCustomEvent('employee_portal_click', {custom_parameter_button_type: 'employee_portal'})">
+                    <i class="fas fa-user-shield"></i> <span data-translate="clickHereText">TP employee!</span>
+                </a>
+            </div>
         </div>
-      </div>
     </div>
-
     <div class="card shadow-sm mx-auto" style="max-width: 800px;">
-      <div class="card shadow-sm">
-        <div class="card-body p-4">
-          <div id="step1">
-            <div class="mb-3">
-              <label for="page-lang-select" class="form-label" data-translate="pageLangLabel">Choose Your Language:</label>
-              <select id="page-lang-select" class="form-select">
-                <option value="en">English</option>
-                <option value="ja">Japanese</option>
-                <option value="ko">Korean</option>
-                <option value="zh-CN">Mandarin</option>
-                <option value="zh-HK">Cantonese</option>
-              </select>
-            </div>
+    
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <div id="step1">
+                    <div class="mb-3">
+                        <label for="page-lang-select" class="form-label" data-translate="pageLangLabel">Choose Your Language:</label>
+                        <select id="page-lang-select" class="form-select">
+                            <option value="en">English</option>
+                            <option value="ja">Japanese</option>
+                            <option value="ko">Korean</option>
+                            <option value="zh-CN">Mandarin</option>
+                            <option value="zh-HK">Cantonese</option>
+                        </select>
+                    </div>
 
-            <div class="section-box mb-4">
-              <h5 class="section-title" data-translate="yourInfoTitle">Your Information</h5>
-              <div class="mb-3">
-                <label for="full-name" class="form-label" data-translate="fullNameLabel">Full Name:</label>
-                <input type="text" id="full-name" class="form-control" data-translate-placeholder="fullNamePlaceholder" required>
-                <div class="invalid-feedback" data-translate="fullNameError">Please provide your full name.</div>
-              </div>
+                    <div class="section-box mb-4">
+                        <h5 class="section-title" data-translate="yourInfoTitle">Your Information</h5>
+                        <div class="mb-3">
+                            <label for="full-name" class="form-label" data-translate="fullNameLabel">Full Name:</label>
+                            <input type="text" id="full-name" class="form-control" data-translate-placeholder="fullNamePlaceholder" required>
+                            <div class="invalid-feedback" data-translate="fullNameError">Please provide your full name.</div>
+                        </div>
 
-              <div class="mb-1">
-                <label for="phone-number" class="form-label" data-translate="phoneLabel">Phone Number:</label>
-                <input type="tel" id="phone-number" class="form-control" data-translate-placeholder="phonePlaceholder" required>
-                <div class="invalid-feedback" data-translate="phoneError">Please provide a valid phone number.</div>
-              </div>
-              <!-- phone hint injected by JS -->
-            </div>
+                        <div class="mb-3">
+                            <label for="phone-number" class="form-label" data-translate="phoneLabel">Phone Number:</label>
+                            <input type="tel" id="phone-number" class="form-control" data-translate-placeholder="phonePlaceholder" required>
+                            <div class="invalid-feedback" data-translate="phoneError">Please provide a valid phone number.</div>
+                        </div>
 
-            <div class="section-box mb-4">
-              <h5 class="section-title" data-translate="friendInfoTitle">Friend's Information</h5>
-              <div class="mb-3">
-                <label for="job-lang-select" class="form-label" data-translate="jobLangLabel">Job Language:</label>
-                <select id="job-lang-select" class="form-select" required>
-                  <option value="" selected disabled data-translate="selectOption">Select an option</option>
-                </select>
-                <div class="invalid-feedback" data-translate="jobLangError">Please select a job language.</div>
-              </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label" data-translate="emailLabel">Email Address:</label>
+                            <input type="email" id="email" class="form-control" data-translate-placeholder="emailPlaceholder" required>
+                            <div class="invalid-feedback" data-translate="emailError">Please provide a valid email address.</div>
+                        </div>
+                    </div>
 
-              <div class="mb-3">
-                <label for="location-select" class="form-label" data-translate="locationLabel">Working Location:</label>
-                <select id="location-select" class="form-select" required>
-                  <option value="" selected disabled data-translate="selectOption">Select an option</option>
-                </select>
-                <div class="invalid-feedback" data-translate="locationError">Please select a location.</div>
-              </div>
-            </div>
+                    <div class="section-box mb-4">
+                        <h5 class="section-title" data-translate="friendInfoTitle">Friend's Information</h5>
+                        <div class="mb-3">
+                            <label for="job-lang-select" class="form-label" data-translate="jobLangLabel">Job Language:</label>
+                            <select id="job-lang-select" class="form-select" required>
+                                <option value="" selected disabled data-translate="selectOption">Select an option</option>
+                            </select>
+                            <div class="invalid-feedback" data-translate="jobLangError">Please select a job language.</div>
+                        </div>
 
-            <!-- No payout preview here. The table will be shown inside T&C modal. -->
+                        <div class="mb-3">
+                            <label for="location-select" class="form-label" data-translate="locationLabel">Working Location:</label>
+                            <select id="location-select" class="form-select" required>
+                                <option value="" selected disabled data-translate="selectOption">Select an option</option>
+                            </select>
+                            <div class="invalid-feedback" data-translate="locationError">Please select a location.</div>
+                        </div>
+                    </div>
 
-            <div class="consent-box mb-4 p-3 border rounded">
-              <div class="form-check">
-                <div class="d-flex align-items-start">
-                  <div class="me-2">
-                    <input type="checkbox" id="consent-checkbox" class="form-check-input" required>
-                  </div>
-                  <div>
-                    <label class="form-check-label" for="consent-checkbox">
-                      <span data-translate="consentText1">I agree to the</span>
-                      <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" data-translate="termsLink"
-                         onclick="trackCustomEvent('terms_conditions_view',{custom_parameter_action:'modal_open'})">terms and conditions</a>
-                      <span data-translate="consentText2">of the Refer a Friend program. I confirm that I have obtained my friend's consent to share their information with TP (Teleperformance Malaysia Sdn Bhd.) for recruitment purposes.</span>
-                    </label>
-                  </div>
+                    <div class="consent-box mb-4 p-3 border rounded">
+                        <div class="form-check">
+                            <div class="d-flex align-items-start">
+                                <div class="me-2">
+                                    <input type="checkbox" id="consent-checkbox" class="form-check-input" required>
+                                </div>
+                                <div>
+                                    <label class="form-check-label" for="consent-checkbox">
+                                        <span data-translate="consentText1">I agree to the</span> 
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" data-translate="termsLink" onclick="trackCustomEvent('terms_conditions_view', {custom_parameter_action: 'modal_open'})">terms and conditions</a> 
+                                        <span data-translate="consentText2">of the Refer a Friend program. I confirm that I have obtained my friend's consent to share their information with TP (Teleperformance Malaysia Sdn Bhd.) for recruitment purposes.</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback" data-translate="consentError">You must agree to the terms and conditions.</div>
+                        </div>
+                    </div>
+
+                    <button id="next-btn" class="btn btn-primary w-100" data-translate="nextBtn" disabled>Submit Referral</button>
+
+                    <!-- Social Media -->
+                    <div class="mt-4">
+                        <div class="row text-center">
+                            <!-- TP Global -->
+                            <div class="col-md-4 mb-3">
+                                <h5 data-translate="tpGlobal">TP Global</h5>
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="https://www.linkedin.com/company/teleperformance" class="social-icon" target="_blank" onclick="trackCustomEvent('social_media_click', {custom_parameter_platform: 'linkedin', custom_parameter_section: 'global'})"><i class="fab fa-linkedin"></i></a>
+                                    <a href="https://www.youtube.com/@TeleperformanceGroup" class="social-icon" target="_blank" onclick="trackCustomEvent('social_media_click', {custom_parameter_platform: 'youtube', custom_parameter_section: 'global'})"><i class="fab fa-youtube"></i></a>
+                                    <a href="https://www.tiktok.com/@teleperformance_group" class="social-icon" target="_blank" onclick="trackCustomEvent('social_media_click', {custom_parameter_platform: 'tiktok', custom_parameter_section: 'global'})"><i class="fab fa-tiktok"></i></a>
+                                </div>
+                            </div>
+                            <!-- TP Malaysia -->
+                            <div class="col-md-4 mb-3">
+                                <h5 data-translate="followMalaysia">TP Malaysia</h5>
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="http://www.facebook.com/TPinMalaysia/" class="social-icon" target="_blank" onclick="trackCustomEvent('social_media_click', {custom_parameter_platform: 'facebook', custom_parameter_section: 'malaysia'})"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="http://www.instagram.com/tp_malaysia/" class="social-icon" target="_blank" onclick="trackCustomEvent('social_media_click', {custom_parameter_platform: 'instagram', custom_parameter_section: 'malaysia'})"><i class="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
+                            <!-- TP Thailand -->
+                            <div class="col-md-4 mb-3">
+                                <h5 data-translate="followThailand">TP Thailand</h5>
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="http://www.facebook.com/TPinThailand/" class="social-icon" target="_blank" onclick="trackCustomEvent('social_media_click', {custom_parameter_platform: 'facebook', custom_parameter_section: 'thailand'})"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="http://www.instagram.com/tpinthailand/" class="social-icon" target="_blank" onclick="trackCustomEvent('social_media_click', {custom_parameter_platform: 'instagram', custom_parameter_section: 'thailand'})"><i class="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="invalid-feedback" data-translate="consentError">You must agree to the terms and conditions.</div>
-              </div>
-            </div>
 
-            <button id="next-btn" class="btn btn-primary w-100" data-translate="nextBtn" disabled>Submit Referral</button>
+                <div id="step2" style="display:none;">
+                    <button id="back-btn" class="btn btn-outline-secondary mb-3">
+                        <i class="fas fa-arrow-left me-2"></i> <span data-translate="backText">Back</span>
+                    </button>
 
-            <!-- Social Media -->
-            <div class="mt-4">
-              <div class="row text-center">
-                <div class="col-md-4 mb-3">
-                  <h5 data-translate="tpGlobal">TP Global</h5>
-                  <div class="d-flex justify-content-center gap-3">
-                    <a href="https://www.linkedin.com/company/teleperformance" class="social-icon" target="_blank"
-                       onclick="trackCustomEvent('social_media_click',{custom_parameter_platform:'linkedin',custom_parameter_section:'global'})"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://www.youtube.com/@TeleperformanceGroup" class="social-icon" target="_blank"
-                       onclick="trackCustomEvent('social_media_click',{custom_parameter_platform:'youtube',custom_parameter_section:'global'})"><i class="fab fa-youtube"></i></a>
-                    <a href="https://www.tiktok.com/@teleperformance_group" class="social-icon" target="_blank"
-                       onclick="trackCustomEvent('social_media_click',{custom_parameter_platform:'tiktok',custom_parameter_section:'global'})"><i class="fab fa-tiktok"></i></a>
-                  </div>
+                    <h4 class="mb-3" data-translate="thankYouTitle">Thank you for your referral!</h4>
+                    <p data-translate="referralMessage">Here's the personalized link for your friend to apply:</p>
+
+                    <div class="input-group mb-3">
+                        <input type="text" id="referral-link" class="form-control" readonly>
+                        <button id="copy-btn" class="btn btn-secondary" type="button" data-translate="copyText">Copy</button>
+                    </div>
+
+                    <div class="text-center my-4">
+                        <canvas id="qr-code-canvas" class="qr-code"></canvas>
+                        <p class="mt-2" data-translate="scanText">Or scan this QR code to apply</p>
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-2 mb-4 flex-wrap">
+                        <button id="share-whatsapp" class="btn btn-success mb-2">
+                            <i class="fab fa-whatsapp me-2"></i> <span data-translate="whatsappText">WhatsApp</span>
+                        </button>
+                        <button id="share-line" class="btn btn-success mb-2" style="background-color: #00B900;">
+                            <i class="fab fa-line me-2"></i> <span data-translate="lineText">Line</span>
+                        </button>
+                        <button id="share-facebook" class="btn btn-success mb-2" style="background-color: #1877F2;">
+                            <i class="fab fa-facebook-f me-2"></i> <span data-translate="facebookText">Facebook</span>
+                        </button>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <h5 data-translate="locationSocial">Our Social Media:</h5>
+                        <div class="social-media-container" id="location-social-links"></div>
+                    </div>
                 </div>
-                <div class="col-md-4 mb-3">
-                  <h5 data-translate="followMalaysia">TP Malaysia</h5>
-                  <div class="d-flex justify-content-center gap-3">
-                    <a href="http://www.facebook.com/TPinMalaysia/" class="social-icon" target="_blank"
-                       onclick="trackCustomEvent('social_media_click',{custom_parameter_platform:'facebook',custom_parameter_section:'malaysia'})"><i class="fab fa-facebook-f"></i></a>
-                    <a href="http://www.instagram.com/tp_malaysia/" class="social-icon" target="_blank"
-                       onclick="trackCustomEvent('social_media_click',{custom_parameter_platform:'instagram',custom_parameter_section:'malaysia'})"><i class="fab fa-instagram"></i></a>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                  <h5 data-translate="followThailand">TP Thailand</h5>
-                  <div class="d-flex justify-content-center gap-3">
-                    <a href="http://www.facebook.com/TPinThailand/" class="social-icon" target="_blank"
-                       onclick="trackCustomEvent('social_media_click',{custom_parameter_platform:'facebook',custom_parameter_section:'thailand'})"><i class="fab fa-facebook-f"></i></a>
-                    <a href="http://www.instagram.com/tpinthailand/" class="social-icon" target="_blank"
-                       onclick="trackCustomEvent('social_media_click',{custom_parameter_platform:'instagram',custom_parameter_section:'thailand'})"><i class="fab fa-instagram"></i></a>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
-
-          <div id="step2" style="display:none;">
-            <button id="back-btn" class="btn btn-outline-secondary mb-3">
-              <i class="fas fa-arrow-left me-2"></i> <span data-translate="backText">Back</span>
-            </button>
-
-            <h4 class="mb-3" data-translate="thankYouTitle">Thank you for your referral!</h4>
-            <p data-translate="referralMessage">Here's the personalized link for your friend to apply:</p>
-
-            <div class="input-group mb-3">
-              <input type="text" id="referral-link" class="form-control" readonly>
-              <button id="copy-btn" class="btn btn-secondary" type="button" data-translate="copyText">Copy</button>
-            </div>
-
-            <div class="text-center my-4">
-              <canvas id="qr-code-canvas" class="qr-code"></canvas>
-              <p class="mt-2" data-translate="scanText">Or scan this QR code to apply</p>
-            </div>
-
-            <div class="d-flex justify-content-center gap-2 mb-4 flex-wrap">
-              <button id="share-whatsapp" class="btn btn-success mb-2">
-                <i class="fab fa-whatsapp me-2"></i> <span data-translate="whatsappText">WhatsApp</span>
-              </button>
-              <button id="share-line" class="btn btn-success mb-2" style="background-color:#00B900;">
-                <i class="fab fa-line me-2"></i> <span data-translate="lineText">Line</span>
-              </button>
-              <button id="share-facebook" class="btn btn-success mb-2" style="background-color:#1877F2;">
-                <i class="fab fa-facebook-f me-2"></i> <span data-translate="facebookText">Facebook</span>
-              </button>
-            </div>
-
-            <div class="mt-4 text-center">
-              <h5 data-translate="locationSocial">Our Social Media:</h5>
-              <div class="social-media-container" id="location-social-links"></div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 text-center text-md-start">
-            <p class="mb-0">© <span id="current-year"></span> TP.COM All rights reserved.</p>
-          </div>
-          <div class="col-md-6 text-center text-md-end">
-            <p class="mb-0">#MoreTogether</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-
-    <!-- T&C Modal (table injected by JS into #termsContent) -->
+    
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-0">© <span id="current-year"></span> TP.COM All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <p class="mb-0">#MoreTogether</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    
     <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="termsModalLabel" data-translate="termsTitle">Terms and Conditions</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body" id="termsContent"></div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="closeBtn">Close</button>
-          </div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel" data-translate="termsTitle">Terms and Conditions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="termsContent"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="closeBtn">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
-  </div><!-- /.container -->
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="translations.js"></script>
-  <script src="script.js"></script>
-
-  <!-- Extra analytics hooks (kept) -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const langSelect = document.getElementById('page-lang-select');
-      if (langSelect) langSelect.addEventListener('change', function() {
-        trackCustomEvent('language_change', { custom_parameter_language: this.value, custom_parameter_action: 'language_selection' });
-      });
-
-      ['full-name','phone-number','email','job-lang-select','location-select'].forEach(id=>{
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.addEventListener('focus', ()=>trackCustomEvent('form_field_focus',{custom_parameter_field:id,non_interaction:true}));
-        el.addEventListener('blur', function(){
-          if (this.value) trackCustomEvent('form_field_complete',{custom_parameter_field:id,non_interaction:true});
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Load translations first, then the main script -->
+    <script src="translations.js"></script>
+    <script src="script.js"></script>
+    <!-- NEW: Inject payout tables (Standard + Interpreter WFH) into Terms modal -->
+    <script src="tnc-payouts.js"></script>
+    
+    <!-- Enhanced Analytics Script for xRAF -->
+    <script>
+        // Enhanced analytics for xRAF program
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track language selection
+            const langSelect = document.getElementById('page-lang-select');
+            if (langSelect) {
+                langSelect.addEventListener('change', function() {
+                    trackCustomEvent('language_change', {
+                        custom_parameter_language: this.value,
+                        custom_parameter_action: 'language_selection'
+                    });
+                });
+            }
+            
+            // Track form interactions
+            const formFields = ['full-name', 'phone-number', 'email', 'job-lang-select', 'location-select'];
+            formFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('focus', function() {
+                        trackCustomEvent('form_field_focus', {
+                            custom_parameter_field: fieldId,
+                            non_interaction: true
+                        });
+                    });
+                    
+                    field.addEventListener('blur', function() {
+                        if (this.value) {
+                            trackCustomEvent('form_field_complete', {
+                                custom_parameter_field: fieldId,
+                                non_interaction: true
+                            });
+                        }
+                    });
+                }
+            });
+            
+            // Track consent checkbox
+            const consentCheckbox = document.getElementById('consent-checkbox');
+            if (consentCheckbox) {
+                consentCheckbox.addEventListener('change', function() {
+                    trackCustomEvent('consent_checkbox', {
+                        custom_parameter_consent_given: this.checked,
+                        custom_parameter_action: 'consent_interaction'
+                    });
+                });
+            }
+            
+            // Track submit button clicks
+            const submitBtn = document.getElementById('next-btn');
+            if (submitBtn) {
+                submitBtn.addEventListener('click', function() {
+                    const jobLang = document.getElementById('job-lang-select').value;
+                    const location = document.getElementById('location-select').value;
+                    
+                    trackCustomEvent('referral_submission', {
+                        custom_parameter_job_language: jobLang,
+                        custom_parameter_location: location,
+                        custom_parameter_action: 'form_submit'
+                    });
+                });
+            }
+            
+            // Track copy link action
+            const copyBtn = document.getElementById('copy-btn');
+            if (copyBtn) {
+                copyBtn.addEventListener('click', function() {
+                    trackCustomEvent('referral_link_copy', {
+                        custom_parameter_action: 'copy_link'
+                    });
+                });
+            }
+            
+            // Track QR code visibility
+            const qrCodeCanvas = document.getElementById('qr-code-canvas');
+            if (qrCodeCanvas) {
+                const observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            trackCustomEvent('qr_code_view', {
+                                custom_parameter_action: 'qr_code_visible',
+                                non_interaction: true
+                            });
+                        }
+                    });
+                });
+                observer.observe(qrCodeCanvas);
+            }
+            
+            // Track modal interactions
+            const termsModal = document.getElementById('termsModal');
+            if (termsModal) {
+                termsModal.addEventListener('shown.bs.modal', function() {
+                    trackCustomEvent('terms_modal_view', {
+                        custom_parameter_action: 'terms_opened'
+                    });
+                });
+                
+                termsModal.addEventListener('hidden.bs.modal', function() {
+                    trackCustomEvent('terms_modal_close', {
+                        custom_parameter_action: 'terms_closed'
+                    });
+                });
+            }
+            
+            // Track welcome popup interaction (after it's created)
+            setTimeout(function() {
+                const welcomePopup = document.querySelector('.welcome-popup');
+                if (welcomePopup) {
+                    trackCustomEvent('welcome_popup_shown', {
+                        custom_parameter_action: 'popup_display',
+                        non_interaction: true
+                    });
+                }
+            }, 1000);
         });
-      });
-
-      const consent = document.getElementById('consent-checkbox');
-      if (consent) consent.addEventListener('change',()=>trackCustomEvent('consent_checkbox',{custom_parameter_consent_given: consent.checked, custom_parameter_action:'consent_interaction'}));
-
-      const submitBtn = document.getElementById('next-btn');
-      if (submitBtn) submitBtn.addEventListener('click', function() {
-        trackCustomEvent('referral_submission', {
-          custom_parameter_job_language: document.getElementById('job-lang-select').value,
-          custom_parameter_location: document.getElementById('location-select').value,
-          custom_parameter_action: 'form_submit'
-        });
-      });
-
-      const copyBtn = document.getElementById('copy-btn');
-      if (copyBtn) copyBtn.addEventListener('click', ()=>trackCustomEvent('referral_link_copy',{custom_parameter_action:'copy_link'}));
-
-      const qr = document.getElementById('qr-code-canvas');
-      if (qr) {
-        const obs = new IntersectionObserver(entries=>{
-          entries.forEach(e=>{ if (e.isIntersecting) trackCustomEvent('qr_code_view',{custom_parameter_action:'qr_code_visible',non_interaction:true}); });
-        });
-        obs.observe(qr);
-      }
-
-      const termsModal = document.getElementById('termsModal');
-      if (termsModal) {
-        termsModal.addEventListener('shown.bs.modal', ()=>trackCustomEvent('terms_modal_view',{custom_parameter_action:'terms_opened'}));
-        termsModal.addEventListener('hidden.bs.modal', ()=>trackCustomEvent('terms_modal_close',{custom_parameter_action:'terms_closed'}));
-      }
-    });
-
-    /* Keep the optional wrapper for share button analytics */
-    const originalUpdateShareButtons = window.updateShareButtons;
-    if (typeof originalUpdateShareButtons === 'function') {
-      window.updateShareButtons = function() {
-        originalUpdateShareButtons.apply(this, arguments);
-        const w = document.getElementById('share-whatsapp');
-        const l = document.getElementById('share-line');
-        const f = document.getElementById('share-facebook');
-        if (w) w.addEventListener('click', ()=>trackCustomEvent('referral_share',{custom_parameter_platform:'whatsapp',custom_parameter_action:'share_click'}));
-        if (l) l.addEventListener('click', ()=>trackCustomEvent('referral_share',{custom_parameter_platform:'line',custom_parameter_action:'share_click'}));
-        if (f) f.addEventListener('click', ()=>trackCustomEvent('referral_share',{custom_parameter_platform:'facebook',custom_parameter_action:'share_click'}));
-      };
-    }
-  </script>
+        
+        // Override the updateShareButtons function to add analytics
+        const originalUpdateShareButtons = window.updateShareButtons;
+        if (typeof originalUpdateShareButtons === 'function') {
+            window.updateShareButtons = function() {
+                originalUpdateShareButtons.apply(this, arguments);
+                
+                // Add analytics to share buttons
+                const shareWhatsapp = document.getElementById('share-whatsapp');
+                const shareLine = document.getElementById('share-line');
+                const shareFacebook = document.getElementById('share-facebook');
+                
+                if (shareWhatsapp) {
+                    shareWhatsapp.addEventListener('click', function() {
+                        trackCustomEvent('referral_share', {
+                            custom_parameter_platform: 'whatsapp',
+                            custom_parameter_action: 'share_click'
+                        });
+                    });
+                }
+                
+                if (shareLine) {
+                    shareLine.addEventListener('click', function() {
+                        trackCustomEvent('referral_share', {
+                            custom_parameter_platform: 'line',
+                            custom_parameter_action: 'share_click'
+                        });
+                    });
+                }
+                
+                if (shareFacebook) {
+                    shareFacebook.addEventListener('click', function() {
+                        trackCustomEvent('referral_share', {
+                            custom_parameter_platform: 'facebook',
+                            custom_parameter_action: 'share_click'
+                        });
+                    });
+                }
+            };
+        }
+    </script>
 </body>
 </html>
