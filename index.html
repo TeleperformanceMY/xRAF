@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TP External RAF (Refer A Friend)</title>
 
-  <!-- Google Analytics 4 -->
+  <!-- GA4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T9F5KMVVY8"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -15,29 +15,23 @@
       send_page_view: true,
       allow_google_signals: true,
       allow_ad_personalization_signals: true,
-      custom_map: { 'custom_parameter_1': 'referral_program' }
+      custom_map: {'custom_parameter_1':'referral_program'}
     });
 
     function trackCustomEvent(eventName, parameters = {}) {
-      gtag('event', eventName, {
-        event_category: 'xRAF_Program',
-        event_label: 'External_Referral',
-        ...parameters
-      });
+      gtag('event', eventName, { event_category: 'xRAF_Program', event_label: 'External_Referral', ...parameters });
     }
 
     function trackPageEngagement() {
-      let startTime = Date.now();
-      let maxScroll = 0;
-      window.addEventListener('scroll', function() {
-        let scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-        if (scrollPercent > maxScroll) maxScroll = scrollPercent;
+      let startTime = Date.now(), maxScroll = 0;
+      window.addEventListener('scroll', () => {
+        const p = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+        if (p > maxScroll) maxScroll = p;
       });
-      window.addEventListener('beforeunload', function() {
-        let timeSpent = Math.round((Date.now() - startTime) / 1000);
+      window.addEventListener('beforeunload', () => {
         gtag('event', 'page_engagement', {
           event_category: 'User_Engagement',
-          custom_parameter_time_spent: timeSpent,
+          custom_parameter_time_spent: Math.round((Date.now() - startTime) / 1000),
           custom_parameter_max_scroll: maxScroll,
           non_interaction: true
         });
@@ -60,7 +54,7 @@
       <p class="lead">External Refer A Friend Program</p>
     </div>
 
-    <!-- Main Page Countdown Display -->
+    <!-- Main Page Countdown -->
     <div class="main-countdown-container" id="mainCountdownContainer">
       <div class="countdown-badge">
         <div class="countdown-label">Total Rewards Available</div>
@@ -69,7 +63,7 @@
       </div>
     </div>
 
-    <!-- Top buttons -->
+    <!-- Buttons -->
     <div class="buttons-container">
       <div class="job-portal-wrapper mb-3">
         <a href="https://tpmyandtpth.github.io/LP/?utm_source=xRAF&utm_medium=Broadcast&utm_campaign=landing_page&lang=en"
@@ -78,18 +72,15 @@
           <i class="fas fa-briefcase"></i> <span data-translate="jobPortalText"> TP Job Portal</span>
         </a>
       </div>
-
       <div class="small-buttons-row">
         <div class="dashboard-btn-wrapper">
-          <a href="https://tpmyandtpth.github.io/xRAF-Dashboard/"
-             class="dashboard-btn" target="_blank"
+          <a href="https://tpmyandtpth.github.io/xRAF-Dashboard/" class="dashboard-btn" target="_blank"
              onclick="trackCustomEvent('dashboard_click',{custom_parameter_button_type:'dashboard'})">
             <i class="fas fa-tachometer-alt"></i> <span data-translate="dashboardText">Dashboard</span>
           </a>
         </div>
         <div class="employee-login-wrapper">
-          <a href="https://tpmyandtpth.github.io/RAF/"
-             class="employee-btn" target="_blank"
+          <a href="https://tpmyandtpth.github.io/RAF/" class="employee-btn" target="_blank"
              onclick="trackCustomEvent('employee_portal_click',{custom_parameter_button_type:'employee_portal'})">
             <i class="fas fa-user-shield"></i> <span data-translate="clickHereText">TP employee!</span>
           </a>
@@ -125,7 +116,7 @@
                 <input type="tel" id="phone-number" class="form-control" data-translate-placeholder="phonePlaceholder" required>
                 <div class="invalid-feedback" data-translate="phoneError">Please provide a valid phone number.</div>
               </div>
-              <!-- Hint goes under phone -->
+              <!-- phone hint injected by JS -->
             </div>
 
             <div class="section-box mb-4">
@@ -147,55 +138,7 @@
               </div>
             </div>
 
-            <!-- NEW: Referral Bonus Preview -->
-            <div class="section-box mb-4">
-              <h5 class="section-title" data-translate="payoutTitle">Referral Bonus (Preview)</h5>
-
-              <div id="payout-box" class="payout-grid" aria-live="polite">
-                <!-- Standard roles -->
-                <div id="payout-standard" class="payout-card active">
-                  <div class="payout-badge" data-translate="payoutStandardTitle">Standard Roles</div>
-                  <ul class="payout-list">
-                    <li>
-                      <span class="payout-stage" data-translate="payoutStandardA1Label">Assessment Passed</span>
-                      <span class="payout-amount" data-translate="payoutStandardA1Value">RM50</span>
-                    </li>
-                    <li>
-                      <span class="payout-stage" data-translate="payoutStandardA2Label">Probation Completed (90 days)</span>
-                      <span class="payout-amount" data-translate="payoutStandardA2Value">RM750</span>
-                    </li>
-                    <li class="payout-total">
-                      <span class="payout-stage" data-translate="payoutTotalLabel">Total</span>
-                      <span class="payout-amount" data-translate="payoutStandardTotal">RM800</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <!-- Interpreter (WFH) -->
-                <div id="payout-interpreter" class="payout-card">
-                  <div class="payout-badge special" data-translate="payoutInterpreterTitle">Interpreter (Work From Home)</div>
-                  <ul class="payout-list">
-                    <li>
-                      <span class="payout-stage" data-translate="payoutInterpreterA1Label">First Day of Work</span>
-                      <span class="payout-amount" data-translate="payoutInterpreterA1Value">RM2,000</span>
-                    </li>
-                    <li>
-                      <span class="payout-stage" data-translate="payoutInterpreterA2Label">After 90 Days</span>
-                      <span class="payout-amount" data-translate="payoutInterpreterA2Value">RM3,000</span>
-                    </li>
-                    <li class="payout-total">
-                      <span class="payout-stage" data-translate="payoutTotalLabel">Total</span>
-                      <span class="payout-amount" data-translate="payoutInterpreterTotal">RM5,000</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="small text-muted mt-2" data-translate="payoutNote">
-                The actual bonus is based on the specific job (language + location). Interpreter (Work From Home) follows the special RM5,000 structure.
-              </div>
-            </div>
-            <!-- /Referral Bonus Preview -->
+            <!-- No payout preview here. The table will be shown inside T&C modal. -->
 
             <div class="consent-box mb-4 p-3 border rounded">
               <div class="form-check">
@@ -263,7 +206,7 @@
             <p data-translate="referralMessage">Here's the personalized link for your friend to apply:</p>
 
             <div class="input-group mb-3">
-              <input type="text" id="referral-link" class="form-control" readonly/>
+              <input type="text" id="referral-link" class="form-control" readonly>
               <button id="copy-btn" class="btn btn-secondary" type="button" data-translate="copyText">Copy</button>
             </div>
 
@@ -307,7 +250,7 @@
       </div>
     </footer>
 
-    <!-- Terms -->
+    <!-- T&C Modal (table injected by JS into #termsContent) -->
     <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -326,19 +269,16 @@
   </div><!-- /.container -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Load translations first, then the main script -->
   <script src="translations.js"></script>
   <script src="script.js"></script>
 
-  <!-- Enhanced analytics hooks -->
+  <!-- Extra analytics hooks (kept) -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const langSelect = document.getElementById('page-lang-select');
-      if (langSelect) {
-        langSelect.addEventListener('change', function() {
-          trackCustomEvent('language_change', { custom_parameter_language: this.value, custom_parameter_action: 'language_selection' });
-        });
-      }
+      if (langSelect) langSelect.addEventListener('change', function() {
+        trackCustomEvent('language_change', { custom_parameter_language: this.value, custom_parameter_action: 'language_selection' });
+      });
 
       ['full-name','phone-number','email','job-lang-select','location-select'].forEach(id=>{
         const el = document.getElementById(id);
@@ -367,9 +307,7 @@
       const qr = document.getElementById('qr-code-canvas');
       if (qr) {
         const obs = new IntersectionObserver(entries=>{
-          entries.forEach(e=>{
-            if (e.isIntersecting) trackCustomEvent('qr_code_view',{custom_parameter_action:'qr_code_visible',non_interaction:true});
-          });
+          entries.forEach(e=>{ if (e.isIntersecting) trackCustomEvent('qr_code_view',{custom_parameter_action:'qr_code_visible',non_interaction:true}); });
         });
         obs.observe(qr);
       }
@@ -379,14 +317,21 @@
         termsModal.addEventListener('shown.bs.modal', ()=>trackCustomEvent('terms_modal_view',{custom_parameter_action:'terms_opened'}));
         termsModal.addEventListener('hidden.bs.modal', ()=>trackCustomEvent('terms_modal_close',{custom_parameter_action:'terms_closed'}));
       }
-
-      setTimeout(function() {
-        const welcomePopup = document.querySelector('.welcome-popup');
-        if (welcomePopup) {
-          trackCustomEvent('welcome_popup_shown',{custom_parameter_action:'popup_display',non_interaction:true});
-        }
-      }, 1000);
     });
+
+    /* Keep the optional wrapper for share button analytics */
+    const originalUpdateShareButtons = window.updateShareButtons;
+    if (typeof originalUpdateShareButtons === 'function') {
+      window.updateShareButtons = function() {
+        originalUpdateShareButtons.apply(this, arguments);
+        const w = document.getElementById('share-whatsapp');
+        const l = document.getElementById('share-line');
+        const f = document.getElementById('share-facebook');
+        if (w) w.addEventListener('click', ()=>trackCustomEvent('referral_share',{custom_parameter_platform:'whatsapp',custom_parameter_action:'share_click'}));
+        if (l) l.addEventListener('click', ()=>trackCustomEvent('referral_share',{custom_parameter_platform:'line',custom_parameter_action:'share_click'}));
+        if (f) f.addEventListener('click', ()=>trackCustomEvent('referral_share',{custom_parameter_platform:'facebook',custom_parameter_action:'share_click'}));
+      };
+    }
   </script>
 </body>
 </html>
