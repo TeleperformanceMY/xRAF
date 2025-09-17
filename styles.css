@@ -1120,3 +1120,52 @@ footer a:hover {
         font-size: 1rem;
     }
 }
+
+/* --- T&C payout tables (non-destructive; uses your variables) --- */
+.tnc-payout-title {
+  color: var(--primary-color);
+  font-weight: 700;
+  margin: 0.25rem 0 0.75rem;
+  border-left: 4px solid var(--secondary-color);
+  padding-left: 10px;
+}
+
+.tnc-caption {
+  caption-side: top;
+  color: var(--gray-color);
+  font-weight: 600;
+  padding-bottom: .25rem;
+}
+
+.table.tnc-table {
+  background: var(--white);
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table.tnc-table thead th {
+  background: var(--section-bg);
+  color: var(--primary-color);
+  border-bottom: 2px solid #e9ecef;
+  font-weight: 700;
+}
+
+.table.tnc-table tbody tr td {
+  vertical-align: middle;
+}
+
+.table.tnc-table tbody tr:not(.tnc-total-row) td {
+  border-top: 1px solid #f1f3f5;
+}
+
+.tnc-total-row td {
+  background: #f4f7fb;
+  border-top: 2px solid #e0e6ed !important;
+  font-size: 1rem;
+  color: var(--primary-color);
+}
+
+@media (max-width: 576px) {
+  .table.tnc-table th, .table.tnc-table td { font-size: .95rem; }
+}
