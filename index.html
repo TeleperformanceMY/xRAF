@@ -288,8 +288,6 @@
     <!-- Load translations first, then the main script -->
     <script src="translations.js"></script>
     <script src="script.js"></script>
-    <!-- NEW: Inject payout tables (Standard + Interpreter WFH) into Terms modal -->
-    <script src="tnc-payouts.js"></script>
     
     <!-- Enhanced Analytics Script for xRAF -->
     <script>
@@ -393,6 +391,17 @@
                 termsModal.addEventListener('hidden.bs.modal', function() {
                     trackCustomEvent('terms_modal_close', {
                         custom_parameter_action: 'terms_closed'
+                    });
+                });
+            }
+            
+            // Track step navigation
+            const backBtn = document.getElementById('back-btn');
+            if (backBtn) {
+                backBtn.addEventListener('click', function() {
+                    trackCustomEvent('step_navigation', {
+                        custom_parameter_direction: 'back_to_step1',
+                        custom_parameter_action: 'navigation'
                     });
                 });
             }
