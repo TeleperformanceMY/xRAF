@@ -20,27 +20,27 @@ document.addEventListener('DOMContentLoaded', function () {
     locationSocialLinks: document.getElementById('location-social-links'),
     termsModal: document.getElementById('termsModal'),
     termsContent: document.getElementById('termsContent'),
-    mainCountdownAmount: document.getElementById('mainCountdownAmount'),
-    payoutBox: document.getElementById('payout-box'),
-    payoutStandard: document.getElementById('payout-standard'),
-    payoutInterpreter: document.getElementById('payout-interpreter')
+    mainCountdownAmount: document.getElementById('mainCountdownAmount')
   };
 
   let currentLanguage = 'en';
   let currentLocation = '';
   let jobData = [];
 
-  // Safer translation getter with fallback
+  // Expose sharing hook for analytics wrapper
+  window.updateShareButtons = updateShareButtons;
+
+  // Helpers
   function t(key, fallback = '') {
     try {
       const pack = translations[currentLanguage] || translations.en || {};
       return (pack && pack[key]) || fallback || key;
-    } catch {
-      return fallback || key;
-    }
+    } catch { return fallback || key; }
   }
 
-  // Main page countdown visual pulse only (kept as-is)
+  function formatMoney(amount) { return 'RM' + Math.floor(amount).toLocaleString('en-US'); }
+
+  // Main page countdown visual pulse only
   function startMainCountdown() {
     function addVisualEffects() {
       elements.mainCountdownAmount.classList.add('pulse');
@@ -50,11 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(addVisualEffects, 5000);
   }
 
-  function formatMoney(amount) {
-    return 'RM' + Math.floor(amount).toLocaleString('en-US');
-  }
-
-  // Welcome popup (unchanged behavior, text picked from translations where possible)
+  // Welcome popup
   function showWelcomePopup() {
     const popup = document.createElement('div');
     popup.className = 'welcome-popup';
@@ -64,109 +60,92 @@ document.addEventListener('DOMContentLoaded', function () {
     logo.alt = 'Teleperformance Logo';
     logo.className = 'welcome-logo';
 
-    const countdownContainer = document.createElement('div');
-    countdownContainer.className = 'welcome-countdown-container';
+    const container = document.createElement('div');
+    container.className = 'welcome-countdown-container';
 
-    const countdownTitle = document.createElement('div');
-    countdownTitle.className = 'welcome-countdown-title';
-    countdownTitle.textContent = t('welcomeTotalRewards', 'Total Rewards Available');
+    const title = document.createElement('div');
+    title.className = 'welcome-countdown-title';
+    title.textContent = t('welcomeTotalRewards', 'Total Rewards Available');
 
-    const moneyCountdown = document.createElement('div');
-    moneyCountdown.className = 'welcome-money-countdown';
-    moneyCountdown.id = 'welcomeMoneyCountdown';
-    moneyCountdown.textContent = 'RM30,000';
+    const amount = document.createElement('div');
+    amount.className = 'welcome-money-countdown';
+    amount.id = 'welcomeMoneyCountdown';
+    amount.textContent = 'RM30,000';
 
-    const hurryMessage = document.createElement('div');
-    hurryMessage.className = 'welcome-hurry-message';
-    hurryMessage.textContent = t('hurry1', 'Hurry! The rewards are disappearing fast! 🚀');
+    const hurry = document.createElement('div');
+    hurry.className = 'welcome-hurry-message';
+    hurry.textContent = t('hurry1', 'Hurry! The rewards are disappearing fast! 🚀');
 
-    countdownContainer.appendChild(countdownTitle);
-    countdownContainer.appendChild(moneyCountdown);
-    countdownContainer.appendChild(hurryMessage);
+    container.appendChild(title);
+    container.appendChild(amount);
+    container.appendChild(hurry);
 
-    const messageContainer = document.createElement('div');
-    messageContainer.className = 'welcome-message-container';
-
-    const welcomeMessages = [
-      (translations.en && translations.en.welcomeMessage) || 'Welcome!',
-      (translations.ja && translations.ja.welcomeMessage) || 'ようこそ！',
-      (translations.ko && translations.ko.welcomeMessage) || '환영합니다!',
-      (translations['zh-CN'] && translations['zh-CN'].welcomeMessage) || '欢迎！',
-      (translations['zh-HK'] && translations['zh-HK'].welcomeMessage) || '歡迎！'
-    ];
-    welcomeMessages.forEach((msg, index) => {
+    const messages = document.createElement('div');
+    messages.className = 'welcome-message-container';
+    [translations.en?.welcomeMessage || 'Welcome!',
+     translations.ja?.welcomeMessage || 'ようこそ！',
+     translations.ko?.welcomeMessage || '환영합니다!',
+     translations['zh-CN']?.welcomeMessage || '欢迎！',
+     translations['zh-HK']?.welcomeMessage || '歡迎！'
+    ].forEach((msg, i) => {
       const line = document.createElement('div');
       line.className = 'welcome-message-line';
       line.textContent = msg;
-      line.style.animationDelay = `${index * 0.3}s`;
-      messageContainer.appendChild(line);
+      line.style.animationDelay = `${i * 0.3}s`;
+      messages.appendChild(line);
     });
 
     popup.appendChild(logo);
-    popup.appendChild(countdownContainer);
-    popup.appendChild(messageContainer);
+    popup.appendChild(container);
+    popup.appendChild(messages);
     document.body.appendChild(popup);
 
-    const moneyElement = document.getElementById('welcomeMoneyCountdown');
-    const startAmount = 30000, endAmount = 20000, duration = 3000;
-    const startTime = Date.now();
-
-    function updateCountdown() {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = startAmount - (startAmount - endAmount) * eased;
-      moneyElement.textContent = formatMoney(current);
-      moneyElement.classList.add('pumping');
-      setTimeout(() => moneyElement.classList.remove('pumping'), 500);
-
+    const startAmount = 30000, endAmount = 20000, duration = 3000, start = Date.now();
+    const amountEl = document.getElementById('welcomeMoneyCountdown');
+    (function tick(){
+      const p = Math.min((Date.now() - start)/duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      amountEl.textContent = formatMoney(startAmount - (startAmount - endAmount) * eased);
+      amountEl.classList.add('pumping'); setTimeout(()=>amountEl.classList.remove('pumping'), 500);
       if (Math.random() < 0.02) {
-        const hurryMessages = [
-          t('hurry1', "Hurry! The rewards are disappearing fast! 🚀"),
-          t('hurry2', "Don't wait - the amount is dropping! ⏳"),
-          t('hurry3', "Limited rewards available! 💰"),
-          t('hurry4', "Join now before it's too late! 🔥"),
-          t('hurry5', "Others are claiming their rewards - don't miss out! 👥")
+        const arr = [
+          t('hurry1',"Hurry! The rewards are disappearing fast! 🚀"),
+          t('hurry2',"Don't wait - the amount is dropping! ⏳"),
+          t('hurry3',"Limited rewards available! 💰"),
+          t('hurry4',"Join now before it's too late! 🔥"),
+          t('hurry5',"Others are claiming their rewards - don't miss out! 👥")
         ];
-        hurryMessage.textContent = hurryMessages[Math.floor(Math.random() * hurryMessages.length)];
+        hurry.textContent = arr[Math.floor(Math.random()*arr.length)];
       }
-      if (progress < 1) requestAnimationFrame(updateCountdown);
+      if (p < 1) requestAnimationFrame(tick);
       else {
-        const finals = [
-          t('final1', "Last chance to claim your rewards!"),
-          t('final2', "Time's almost up! Don't miss out!"),
-          t('final3', "Final amounts remaining - act now!"),
-          t('final4', "Rewards are going fast - join today!")
-        ];
-        hurryMessage.textContent = finals[Math.floor(Math.random() * finals.length)];
+        const finals = [t('final1',"Last chance to claim your rewards!"), t('final2',"Time's almost up! Don't miss out!"),
+                        t('final3',"Final amounts remaining - act now!"), t('final4',"Rewards are going fast - join today!")];
+        hurry.textContent = finals[Math.floor(Math.random()*finals.length)];
       }
-    }
-    updateCountdown();
+    })();
 
-    setTimeout(() => {
-      popup.classList.add('hidden');
-      setTimeout(() => { popup.remove(); startMainCountdown(); }, 1000);
-    }, 5000);
+    setTimeout(()=>{ popup.classList.add('hidden'); setTimeout(()=>{ popup.remove(); startMainCountdown(); }, 1000); }, 5000);
   }
 
-  // Phone hint element (under phone field)
+  // Phone hint under phone field
   const phoneHint = document.createElement('div');
   phoneHint.className = 'phone-hint mt-1 small text-muted';
   elements.phoneNumber.parentNode.insertBefore(phoneHint, elements.phoneNumber.nextSibling);
 
-  // Load job data from data.json (you said JSON is already updated)
+  // Load jobs (JSON already updated by you)
   function loadJobData() {
     fetch('data.json')
       .then(r => { if (!r.ok) throw new Error('Network response was not ok'); return r.json();})
-      .then(data => { jobData = data; populateJobDropdowns(); updatePayoutPreview(); })
+      .then(data => { jobData = data; populateJobDropdowns(); })
       .catch(err => { console.error('Error loading job data:', err); alert(t('loadError','Failed to load jobs. Please try again.')); });
   }
 
-  function unique(arr) { return [...new Set(arr)]; }
+  function unique(a){ return [...new Set(a)]; }
 
   function populateJobDropdowns() {
-    const languages = unique(jobData.map(j => j.Language).filter(Boolean));
-    const locations = unique(jobData.map(j => j.Location).filter(Boolean));
+    const languages = unique(jobData.map(j=>j.Language).filter(Boolean));
+    const locations = unique(jobData.map(j=>j.Location).filter(Boolean));
 
     elements.jobLangSelect.innerHTML = '';
     addOption(elements.jobLangSelect, '', t('selectOption','Select an option'), true, true);
@@ -177,12 +156,122 @@ document.addEventListener('DOMContentLoaded', function () {
     locations.forEach(loc => addOption(elements.locationSelect, loc, loc));
   }
 
-  function addOption(select, value, text, disabled=false, selected=false) {
-    const option = document.createElement('option');
-    option.value = value; option.textContent = text;
-    option.disabled = disabled; option.selected = selected;
-    select.appendChild(option);
+  function addOption(select, value, text, disabled=false, selected=false){
+    const o = document.createElement('option');
+    o.value = value; o.textContent = text; o.disabled = disabled; o.selected = selected;
+    select.appendChild(o);
   }
+
+  // ===== T&C payout table injection =====
+  function payoutStrings(lang){
+    // Fallbacks in EN if your translations.js doesn’t define these keys
+    const p = translations[lang] || {};
+    return {
+      sectionTitle: p.tncPayoutTitle || 'Referral Bonus Structure',
+      standardHeader: p.tncStandardHeader || 'Standard Roles',
+      interpHeader: p.tncInterpreterHeader || 'Interpreter (Work From Home)',
+      colStage: p.tncColStage || 'Stage',
+      colCondition: p.tncColCondition || 'Condition',
+      colAmount: p.tncColAmount || 'Amount',
+      total: p.tncTotal || 'Total',
+      // Standard
+      stA1Stage: p.tncStA1Stage || 'Assessment Passed',
+      stA1Cond: p.tncStA1Cond || 'Candidate passes the AI assessment',
+      stA1Amt:  p.tncStA1Amt  || 'RM50',
+      stA2Stage: p.tncStA2Stage || 'Probation Completed (90 days)',
+      stA2Cond: p.tncStA2Cond || 'Candidate completes 90-day probation period',
+      stA2Amt:  p.tncStA2Amt  || 'RM750',
+      stTotalAmt: p.tncStTotalAmt || 'RM800',
+      // Interpreter WFH
+      inA1Stage: p.tncInA1Stage || 'First Day of Work',
+      inA1Cond: p.tncInA1Cond || 'Candidate joins and completes Day 1',
+      inA1Amt:  p.tncInA1Amt  || 'RM2,000',
+      inA2Stage: p.tncInA2Stage || 'After 90 Days',
+      inA2Cond: p.tncInA2Cond || 'Candidate completes 90 days of service',
+      inA2Amt:  p.tncInA2Amt  || 'RM3,000',
+      inTotalAmt: p.tncInTotalAmt || 'RM5,000',
+      note: p.tncPayoutNote || 'All other xRAF terms remain unchanged. Interpreter (WFH) follows the special RM5,000 structure.'
+    };
+  }
+
+  function buildPayoutTableHTML(){
+    const s = payoutStrings(currentLanguage);
+    return `
+      <div id="tnc-payout-table-wrapper" class="mt-3">
+        <h6 class="tnc-payout-title">${s.sectionTitle}</h6>
+
+        <div class="table-responsive mb-3">
+          <table class="table tnc-table">
+            <caption class="tnc-caption">${s.standardHeader}</caption>
+            <thead>
+              <tr>
+                <th scope="col">${s.colStage}</th>
+                <th scope="col">${s.colCondition}</th>
+                <th scope="col" class="text-end">${s.colAmount}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>${s.stA1Stage}</td>
+                <td>${s.stA1Cond}</td>
+                <td class="text-end"><strong>${s.stA1Amt}</strong></td>
+              </tr>
+              <tr>
+                <td>${s.stA2Stage}</td>
+                <td>${s.stA2Cond}</td>
+                <td class="text-end"><strong>${s.stA2Amt}</strong></td>
+              </tr>
+              <tr class="tnc-total-row">
+                <td colspan="2"><strong>${s.total}</strong></td>
+                <td class="text-end"><strong>${s.stTotalAmt}</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table tnc-table">
+            <caption class="tnc-caption">${s.interpHeader}</caption>
+            <thead>
+              <tr>
+                <th scope="col">${s.colStage}</th>
+                <th scope="col">${s.colCondition}</th>
+                <th scope="col" class="text-end">${s.colAmount}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>${s.inA1Stage}</td>
+                <td>${s.inA1Cond}</td>
+                <td class="text-end"><strong>${s.inA1Amt}</strong></td>
+              </tr>
+              <tr>
+                <td>${s.inA2Stage}</td>
+                <td>${s.inA2Cond}</td>
+                <td class="text-end"><strong>${s.inA2Amt}</strong></td>
+              </tr>
+              <tr class="tnc-total-row">
+                <td colspan="2"><strong>${s.total}</strong></td>
+                <td class="text-end"><strong>${s.inTotalAmt}</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="small text-muted mt-2 mb-0">${s.note}</p>
+      </div>`;
+  }
+
+  function injectPayoutTableIntoTnC() {
+    if (!elements.termsContent) return;
+    // Reset to translated base content
+    elements.termsContent.innerHTML = (translations[currentLanguage]?.termsContent) || (translations.en?.termsContent) || '';
+    // Remove old instance (if any) then append
+    const old = elements.termsContent.querySelector('#tnc-payout-table-wrapper');
+    if (old) old.remove();
+    elements.termsContent.insertAdjacentHTML('beforeend', buildPayoutTableHTML());
+  }
+  // ===== /T&C payout table injection =====
 
   function updatePageContent() {
     const pack = translations[currentLanguage] || translations.en || {};
@@ -198,12 +287,14 @@ document.addEventListener('DOMContentLoaded', function () {
       if (pack[key]) el.placeholder = pack[key];
     });
 
-    if (elements.termsContent) elements.termsContent.innerHTML = pack.termsContent || '';
-
     // Phone hint
     phoneHint.textContent = pack.phoneHint || 'Use your TnG-registered number if applicable.';
+
+    // Inject T&C payout tables (after loading base terms)
+    injectPayoutTableIntoTnC();
+
+    // Rebuild dropdowns to reflect any localized labels you might add later
     populateJobDropdowns();
-    updatePayoutPreview();
   }
 
   function changeLanguage() {
@@ -242,53 +333,12 @@ document.addEventListener('DOMContentLoaded', function () {
     return ok;
   }
 
-  // Only numbers in phone field + show hint
+  // Phone input: digits only + hint toggle
   elements.phoneNumber.addEventListener('input', function () {
     this.value = this.value.replace(/[^\d]/g, '');
     phoneHint.style.display = this.value.length > 0 ? 'block' : 'none';
     validateForm();
   });
-
-  // === NEW: Interpreter (WFH) payout detection ===
-  const PAYOUTS = {
-    standard: { a1: 50, a2: 750, total: 800 },
-    interpreterWFH: { a1: 2000, a2: 3000, total: 5000 }
-  };
-
-  function coalesceJobText(job, keys) {
-    for (const k of keys) {
-      if (job[k] && typeof job[k] === 'string') return job[k].toLowerCase();
-    }
-    return '';
-  }
-
-  function truthyFlag(job, keys) {
-    for (const k of keys) {
-      if (k in job) {
-        const v = job[k];
-        if (v === true || v === 'true' || v === 1 || v === '1' ) return true;
-      }
-    }
-    return false;
-  }
-
-  function isInterpreterWFH(job) {
-    // Robust across many possible JSON schemas (you said you already updated JSON)
-    if (!job || typeof job !== 'object') return false;
-
-    // Allow explicit flags if present
-    if (truthyFlag(job, ['InterpreterWFH','Interpreter_WFH','isInterpreterWFH'])) return true;
-
-    const title = coalesceJobText(job, ['Job Title','Title','Role','Position','Evergreen Job Title','Posting Title']);
-    const category = coalesceJobText(job, ['Category','Function','Department','Family']);
-    const mode = coalesceJobText(job, ['Work Mode','Work Arrangement','Work Type','Working Arrangement','Mode']);
-
-    const text = [title, category, mode].join(' ');
-    const isInterp = /\binterpre(t|ter|ting)\b/.test(text); // matches interpret/ interpreter
-    const isWFH = /(work\s*from\s*home|wfh|remote)/.test(text);
-
-    return isInterp && isWFH;
-  }
 
   function findSelectedJob() {
     const lang = elements.jobLangSelect.value;
@@ -296,23 +346,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!lang || !loc) return null;
     return jobData.find(item => item.Language === lang && item.Location === loc) || null;
   }
-
-  function updatePayoutPreview() {
-    // Default to standard
-    const job = findSelectedJob();
-    const special = isInterpreterWFH(job);
-
-    elements.payoutStandard.classList.toggle('active', !special);
-    elements.payoutInterpreter.classList.toggle('active', !!special);
-
-    // Also announce to screen readers
-    if (elements.payoutBox) {
-      elements.payoutBox.setAttribute('aria-label',
-        special ? 'Interpreter (WFH) payout selected' : 'Standard payout selected'
-      );
-    }
-  }
-  // === /NEW ===
 
   function generateReferral() {
     if (!validateForm()) return false;
@@ -334,12 +367,10 @@ document.addEventListener('DOMContentLoaded', function () {
         alert(t('noJobError','No application link found for this selection.'));
         return false;
       }
-
       const referralUrl = `${baseUrl}?iis=xRAF&iisn=${name}%7C${phone}%7C${email}`;
       elements.referralLink.value = referralUrl;
       generateQRCode(referralUrl);
       updateSocialLinks();
-      updatePayoutPreview(); // keep preview synced
       return true;
     }
 
@@ -348,11 +379,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function generateQRCode(url) {
-    QRCode.toCanvas(elements.qrCodeCanvas, url, {
-      width: 200, margin: 2, color: { dark: '#000000', light: '#ffffff' }
-    }, function (error) {
-      if (error) console.error('QR Code generation error:', error);
-    });
+    QRCode.toCanvas(elements.qrCodeCanvas, url, { width: 200, margin: 2, color: { dark:'#000000', light:'#ffffff' } },
+      function (error) { if (error) console.error('QR Code generation error:', error); }
+    );
   }
 
   function updateSocialLinks() {
@@ -397,7 +426,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function updateShareButtons() {
     const shareUrl = encodeURIComponent(elements.referralLink.value);
-    const shareText = (translations[currentLanguage] && translations[currentLanguage].shareMessage) || (translations.en && translations.en.shareMessage) || 'Apply with my TP referral: ';
+    const shareText = (translations[currentLanguage] && translations[currentLanguage].shareMessage)
+                      || (translations.en && translations.en.shareMessage)
+                      || 'Apply with my TP referral: ';
     const encodedShareText = encodeURIComponent(shareText);
 
     elements.shareWhatsapp.onclick = () => window.open(`https://wa.me/?text=${encodedShareText}${shareUrl}`, '_blank');
@@ -420,7 +451,6 @@ document.addEventListener('DOMContentLoaded', function () {
       window.scrollTo(0, 0);
     }
   }
-
   function showStep1() {
     elements.step2.style.display = 'none';
     elements.step1.style.display = 'block';
@@ -432,19 +462,20 @@ document.addEventListener('DOMContentLoaded', function () {
     elements.fullName.addEventListener('input', validateForm);
     elements.phoneNumber.addEventListener('input', validateForm);
     elements.email.addEventListener('input', validateForm);
-
-    // Update payout preview live on each selection change
-    elements.jobLangSelect.addEventListener('change', function(){ validateForm(); updatePayoutPreview(); });
-    elements.locationSelect.addEventListener('change', function(){ validateForm(); updatePayoutPreview(); });
-
+    elements.jobLangSelect.addEventListener('change', validateForm);
+    elements.locationSelect.addEventListener('change', validateForm);
     elements.consentCheckbox.addEventListener('change', validateForm);
+
     elements.nextBtn.addEventListener('click', showStep2);
     elements.backBtn.addEventListener('click', showStep1);
     elements.copyBtn.addEventListener('click', copyToClipboard);
 
     const termsModal = new bootstrap.Modal(elements.termsModal);
     document.querySelector('[data-bs-target="#termsModal"]').addEventListener('click', function (e) {
-      e.preventDefault(); termsModal.show();
+      e.preventDefault();
+      // Always rebuild in case language changed
+      injectPayoutTableIntoTnC();
+      termsModal.show();
     });
   }
 
