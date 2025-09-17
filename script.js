@@ -22,93 +22,94 @@ document.addEventListener('DOMContentLoaded', function() {
         termsContent: document.getElementById('termsContent'),
         mainCountdownAmount: document.getElementById('mainCountdownAmount')
     };
-// ===== T&C payout table (in-modal) =====
-const TNC_PAYOUT_TABLE_HTML = `
-  <section id="tnc-payout-wrapper" class="mt-3">
-    <h6 class="mb-2">Referral Bonus Structure</h6>
-    <div class="table-responsive">
-      <table class="table table-striped table-bordered align-middle tnc-payout-table">
-        <thead>
-          <tr>
-            <th style="white-space:nowrap;">Stage</th>
-            <th>Description</th>
-            <th style="white-space:nowrap;">Payout (RM)</th>
-            <th style="white-space:nowrap;">Applies To</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Standard roles -->
-          <tr>
-            <td>Assessment Passed</td>
-            <td>Candidate passes the AI assessment</td>
-            <td class="fw-bold">50</td>
-            <td>Standard roles</td>
-          </tr>
-          <tr>
-            <td>Probation Completed (90 days)</td>
-            <td>Candidate completes 90-day probation period</td>
-            <td class="fw-bold">750</td>
-            <td>Standard roles</td>
-          </tr>
-          <tr class="table-light fw-bold">
-            <td colspan="2">Total (Standard)</td>
-            <td class="fw-bold">800</td>
-            <td>Standard roles</td>
-          </tr>
 
-          <!-- Interpreter (WFH) special structure -->
-          <tr class="table-active">
-            <td>First Day of Work</td>
-            <td>Candidate’s first working day</td>
-            <td class="fw-bold">2,000</td>
-            <td><span class="badge badge-interpreter">Interpreter (Work From Home)</span></td>
-          </tr>
-          <tr class="table-active">
-            <td>After 90 Days</td>
-            <td>Candidate completes 90-day period</td>
-            <td class="fw-bold">3,000</td>
-            <td><span class="badge badge-interpreter">Interpreter (Work From Home)</span></td>
-          </tr>
-          <tr class="table-light fw-bold">
-            <td colspan="2">Total (Interpreter WFH)</td>
-            <td class="fw-bold">5,000</td>
-            <td><span class="badge badge-interpreter">Interpreter (Work From Home)</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="tnc-note mt-2">
-      Notes: Payouts are subject to program eligibility and verification. Interpreter (Work From Home) follows the RM5,000 total structure (RM2,000 on first day + RM3,000 after 90 days). Standard roles follow RM800 total (RM50 after assessment + RM750 after 90 days).
-    </p>
-  </section>
-`;
+    // ===== T&C payout table (in-modal) =====
+    const TNC_PAYOUT_TABLE_HTML = `
+      <section id="tnc-payout-wrapper" class="mt-3">
+        <h6 class="mb-2">Referral Bonus Structure</h6>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered align-middle tnc-payout-table">
+            <thead>
+              <tr>
+                <th style="white-space:nowrap;">Stage</th>
+                <th>Description</th>
+                <th style="white-space:nowrap;">Payout (RM)</th>
+                <th style="white-space:nowrap;">Applies To</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Standard roles -->
+              <tr>
+                <td>Assessment Passed</td>
+                <td>Candidate passes the AI assessment</td>
+                <td class="fw-bold">50</td>
+                <td>Standard roles</td>
+              </tr>
+              <tr>
+                <td>Probation Completed (90 days)</td>
+                <td>Candidate completes 90-day probation period</td>
+                <td class="fw-bold">750</td>
+                <td>Standard roles</td>
+              </tr>
+              <tr class="table-light fw-bold">
+                <td colspan="2">Total (Standard)</td>
+                <td class="fw-bold">800</td>
+                <td>Standard roles</td>
+              </tr>
 
-// Replaces the existing payout table in the T&C content (if any), or appends it at the end.
-// It’s called after translations set termsContent, and also when the modal is shown.
-function renderTnCPayoutTable() {
-  const container = document.getElementById('termsContent');
-  if (!container) return;
+              <!-- Interpreter (WFH) special structure -->
+              <tr class="table-active">
+                <td>First Day of Work</td>
+                <td>Candidate’s first working day</td>
+                <td class="fw-bold">2,000</td>
+                <td><span class="badge badge-interpreter">Interpreter (Work From Home)</span></td>
+              </tr>
+              <tr class="table-active">
+                <td>After 90 Days</td>
+                <td>Candidate completes 90-day period</td>
+                <td class="fw-bold">3,000</td>
+                <td><span class="badge badge-interpreter">Interpreter (Work From Home)</span></td>
+              </tr>
+              <tr class="table-light fw-bold">
+                <td colspan="2">Total (Interpreter WFH)</td>
+                <td class="fw-bold">5,000</td>
+                <td><span class="badge badge-interpreter">Interpreter (Work From Home)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tnc-note mt-2">
+          Notes: Payouts are subject to program eligibility and verification. Interpreter (Work From Home) follows the RM5,000 total structure (RM2,000 on first day + RM3,000 after 90 days). Standard roles follow RM800 total (RM50 after assessment + RM750 after 90 days).
+        </p>
+      </section>
+    `;
 
-  // Remove any previously injected wrapper
-  const previous = container.querySelector('#tnc-payout-wrapper');
-  if (previous) previous.remove();
+    // Replaces the existing payout table in the T&C content (if any), or appends it at the end.
+    // It’s called after translations set termsContent, and also when the modal is shown.
+    function renderTnCPayoutTable() {
+      const container = document.getElementById('termsContent');
+      if (!container) return;
 
-  // Prefer replacing an explicit target if it exists
-  const explicitTarget = container.querySelector('[data-tnc-payout], .tnc-payout-table');
+      // Remove any previously injected wrapper
+      const previous = container.querySelector('#tnc-payout-wrapper');
+      if (previous) previous.remove();
 
-  // Fallback: try to replace the first table in the T&C
-  let target = explicitTarget || container.querySelector('table');
+      // Prefer replacing an explicit target if it exists
+      const explicitTarget = container.querySelector('[data-tnc-payout], .tnc-payout-table');
 
-  const wrapper = document.createElement('div');
-  wrapper.innerHTML = TNC_PAYOUT_TABLE_HTML.trim();
+      // Fallback: try to replace the first table in the T&C
+      let target = explicitTarget || container.querySelector('table');
 
-  if (target) {
-    target.replaceWith(wrapper.firstElementChild);
-  } else {
-    // If no table present, append at the end
-    container.appendChild(wrapper.firstElementChild);
-  }
-}
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = TNC_PAYOUT_TABLE_HTML.trim();
+
+      if (target) {
+        target.replaceWith(wrapper.firstElementChild);
+      } else {
+        // If no table present, append at the end
+        container.appendChild(wrapper.firstElementChild);
+      }
+    }
 
     let currentLanguage = 'en';
     let currentLocation = '';
@@ -343,6 +344,8 @@ function renderTnCPayoutTable() {
         
         if (elements.termsContent) {
             elements.termsContent.innerHTML = translation.termsContent;
+            // NEW: enforce/replace the payout table inside T&C after translations load
+            renderTnCPayoutTable();
         }
         
         // Update phone hint message
@@ -579,6 +582,9 @@ function renderTnCPayoutTable() {
             e.preventDefault();
             termsModal.show();
         });
+
+        // NEW: also render/replace the payout table whenever the modal actually opens
+        elements.termsModal.addEventListener('shown.bs.modal', renderTnCPayoutTable);
     }
 
     init();
